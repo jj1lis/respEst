@@ -3,6 +3,20 @@ import std.file;
 import std.string;
 import std.conv;
 
+class NoTextNumberException:Exception{
+    this(int num){
+        string msg="Text Number "~to!string(num)~" not found.";
+        super(msg);
+    }
+}
+
+class stringToIntException:Exception{
+    this(string score){
+        string msg=score~" cannot be converted from 'string' to 'int'";
+        super(msg);
+    }
+}
+
 enum Pos{
     //TODO
     dammy,
@@ -61,6 +75,10 @@ class Sentence{
             words[cnt]=new Word(lines[cnt]);
         }
     }
+
+    int getScore(){
+        return score_stc;
+    }
 };
 
 class Text{
@@ -74,14 +92,24 @@ class Text{
         for(int cnt=0;cnt<lines.length;cnt++){
             if(lines[cnt].split(",")[0]!="%"){
                 tmp_stc.length++;
-                tmp_stc[cnt]=lines[cnt];
+                tmp_stc[cnt_stc]=lines[cnt];
+                cnt_stc++;
             }else{
-                auto stc_lines=tmp_stc;
+                try{
                 auto stc_score=to!int(lines[cnt].split(",")[1]);
+                }catch{
+                    throw new stringToIntException(lines[cnt].split(",")[1]);
+                }
                 sentences.length++;
-                sentences[cnt_stc]=new Sentence(stc_lines,stc_score);
+                sentences[cnt_stc]=new Sentence(tmp_stc,stc_score);
+                tmp_stc.length=0;
+                cnt_stc=0;
             }
         }
+    }
+
+    int getScore(){
+        return score_text;
     }
 };
 
@@ -89,6 +117,34 @@ string[] readFileLine(string filename){
     return readText(filename).splitLines;
 }
 
-void main(){
-    "Hello!!".writeln;
+string[] separateText(string[] file_lines,int text_num){
+    string[] tmp_text=new string[0]:
+    int cnt_text=0;
+    for(int cnt=0;cnt<file_lines.length;cnt++){
+        if(file_lines[cnt].split(",")[0]!="#"){
+            tmp_text.length++;
+            tmp_text[cnt_text]=file_lines[cnt];
+            cnt_text++;
+        }else if(to!int(file_lines[cnt].split(",")[1])==text_num){
+            return tmp_text;
+        }else{
+            tmp_text.length=0;
+            cnt_text=0;
+        }
+    }
+
+    throw new NoTextNumberException(text_num);
+}
+
+void main(string[] args){
+    if(args.length<2){
+        stderr.writeln("Too little argument: Check argument. (context <filename>)");
+    }else if(args.length>2){
+        stderr.writeln("Too many arguments: Check argument. (contexr <filename>)");
+    }else{
+        string file=args[1];
+        //TODO
+    }
+
+    //"Hello!!".writeln;
 }
