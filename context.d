@@ -11,9 +11,44 @@ class NoTextNumberException:Exception{
 }
 
 class stringToIntException:Exception{
-    this(string score){
-        string msg=score~" cannot be converted from 'string' to 'int'";
+    this(string score,int stc){
+        string msg=score~" cannot be converted from \'string\' to \'int\' in sentence "~to!string(stc)~".";
         super(msg);
+    }
+}
+
+enum Type{
+    t_word,
+    t_sentence,
+    t_text,
+}
+
+string typeToString(Type type){
+    switch(type){
+        case Type.t_word:
+            return "Word";
+            //break;
+        case Type.t_sentence:
+            return "Sentence";
+            //break;
+        case Type.t_text:
+            return "Text";
+            //break;
+        default:
+            return "Unknown";
+    }
+}
+
+class scoreException:Exception{
+    this(Type item,int num){
+        string cursor=item.typeToString~" No."~to!string(num);
+        super(cursor~": score must be in range -100 ~ 100.");
+    }
+}
+
+class argumentNumberException:Exception{
+    this(string reason){
+        super("Invalid argument: "~reason~".");
     }
 }
 
@@ -29,21 +64,39 @@ enum Subpos{
     unknown,
 };
 
-class Word{
+
+class Meta{
+    Type type;
+    int num;
+    this(Type target,int nu){
+        type=target;
+        num=nu;
+    }
+    
+    Type getType(){
+        return type;
+    }
+    int getNumber(){
+        return num;
+    }
+}
+
+class Word:Meta{
     private string word;
     private Pos pos;
     private Subpos subpos;
     private string base;
 
-    this(string line_word){
+    this(string line_word,int number){
         auto record=line_word.split(",");
         word=record[0];
         pos=checkPos(record[1]);
         subpos=checkSubpos(record[2]);
         base=record[3];
+        super(Type.t_word,number);
     }
 
-    Pos checkPos(string str_pos){
+    private Pos checkPos(string str_pos){
         switch(str_pos){
             case "":
                 return Pos.dammy;//TODO
@@ -53,7 +106,7 @@ class Word{
         }
     }
 
-    Subpos checkSubpos(string str_subpos){
+    private Subpos checkSubpos(string str_subpos){
         switch(str_subpos){
             case "":
                 return Subpos.dammy;//TODO
@@ -64,16 +117,17 @@ class Word{
     }
 };
 
-class Sentence{
+class Sentence:Meta{
     private Word[] words;
     private int score_stc;
 
-    this(string[] lines, int score){
+    this(string[] lines, int score,int number){
         score_stc=score;
         words=new Word[lines.length];
         for(int cnt=0;cnt<lines.length;cnt++){
-            words[cnt]=new Word(lines[cnt]);
+            words[cnt]=new Word(lines[cnt],cnt);
         }
+        super(Type.t_sentence,number);
     }
 
     int getScore(){
@@ -81,44 +135,59 @@ class Sentence{
     }
 };
 
-class Text{
+class Text:Meta{
     private Sentence[] sentences;
     private int score_text;
 
-    this(string[] lines){
+    this(string[] lines,int number){
         sentences=new Sentence[0];
         string[] tmp_stc=new string[0];
-        int cnt_stc=0;
-        for(int cnt=0;cnt<lines.length;cnt++){
+        int cnt,cnt_tmp,cnt_stc;
+        for(cnt=cnt_tmp=cnt_stc=0;cnt<lines.length;cnt++){
             if(lines[cnt].split(",")[0]!="%"){
                 tmp_stc.length++;
-                tmp_stc[cnt_stc]=lines[cnt];
-                cnt_stc++;
+                tmp_stc[cnt_tmp]=lines[cnt];
+                cnt_tmp++;
             }else{
+                int score_stc;
                 try{
-                auto stc_score=to!int(lines[cnt].split(",")[1]);
+                score_stc=to!int(lines[cnt].split(",")[1]);
                 }catch{
-                    throw new stringToIntException(lines[cnt].split(",")[1]);
+                    throw new stringToIntException(lines[cnt].split(",")[1],cnt_stc);
                 }
                 sentences.length++;
-                sentences[cnt_stc]=new Sentence(tmp_stc,stc_score);
+                sentences[cnt_stc]=new Sentence(tmp_stc,score_stc,cnt_stc);
                 tmp_stc.length=0;
-                cnt_stc=0;
+                cnt_tmp=0;
+                cnt_stc++;
             }
         }
+        super(Type.t_text,number);
     }
 
     int getScore(){
         return score_text;
     }
+
+    void setScore(int score){
+        if(score<-100||score>100){
+            throw new scoreException(type,num);
+        }else{
+            score_text=score;
+        }
+    }
 };
 
-string[] readFileLine(string filename){
+string[] devideFileByLine(string filename){
+    try{
     return readText(filename).splitLines;
+    }catch(FileException fe){
+        throw new FileException(filename,"Failed to open File");
+    }
 }
 
-string[] separateText(string[] file_lines,int text_num){
-    string[] tmp_text=new string[0]:
+string[] separateText(string[] file_lines,int text_num){//TODO!:This dumps myst bugs
+    string[] tmp_text=new string[0];
     int cnt_text=0;
     for(int cnt=0;cnt<file_lines.length;cnt++){
         if(file_lines[cnt].split(",")[0]!="#"){
@@ -136,14 +205,30 @@ string[] separateText(string[] file_lines,int text_num){
     throw new NoTextNumberException(text_num);
 }
 
+int calculateTextScore(Text target){
+    //TODO
+    return 0;//DENUG
+}
+
 void main(string[] args){
     if(args.length<2){
-        stderr.writeln("Too little argument: Check argument. (context <filename>)");
+        stderr.writeln("erorr: "~new argumentNumberException("argument is too little").msg);
     }else if(args.length>2){
-        stderr.writeln("Too many arguments: Check argument. (contexr <filename>)");
+        stderr.writeln("error: "~new argumentNumberException("arguments are too many").msg);
     }else{
-        string file=args[1];
-        //TODO
+        //writeln("DEBUG:ok");
+        int read_text_num=0;
+        Text text;
+        try{
+        text=new Text(separateText(devideFileByLine(args[1]),read_text_num),read_text_num);
+        }catch(FileException fe){
+            stderr.writeln("erorr: "~fe.msg);
+        }catch(NoTextNumberException ntne){
+            stderr.writeln("error: "~ntne.msg);
+        }catch(stringToIntException stie){
+            stderr.writeln("error: "~stie.msg);
+        }
+        
     }
 
     //"Hello!!".writeln;
