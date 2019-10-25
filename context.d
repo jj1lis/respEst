@@ -46,6 +46,7 @@ enum Subpos1{
     toAdverb,
     adparticle,
     adpartParallelFinal,
+    parallel
     toRentei,
     auxiVerb,
     conject,
@@ -343,6 +344,56 @@ Poses idToPoses(int id){
         case Pos_id.symbol_bracketClose:
             return Poses(Pos.symbol,Subpos1.brancketClose);
             break;
+        case Pos_id.symbol_period:
+            return Poses(Pos.symbol,Subpos1.period);
+            break;
+        case Pos_id.symbol_reading:
+            return Poses(Pos.symbol,Subpos1.reading);
+            break;
+        case Pos_id.adject_independ:
+            return Poses(Pos.adject,Subpos1.independ);
+            break;
+        case Pos_id.adject_suffix:
+            return Poses(Pos.adject,Subpos1.suffix);
+            break;
+        case Pos_id.adject_nonIndepend:
+            return Poses(Pos.adject,Subpos1.nonIndepend);
+            break;
+        case Pos_id.particle_Case_common:
+            return Poses(Pos.particle,Subpos1.Case,Subpos2.common);
+            break;
+        case Pos_id.particle_Case_quote:
+            return Poses(Pos.particle,Subpos1.Case,Subpos2.quote);
+            break;
+        case Pos_id.particle_Case_collocate:
+            return Poses(Pos.particle,Subpos1.Case,Subpos2.collcate);
+            break;
+        case Pos_id.particle_depend:
+            return Poses(Pos.particle,Subpos1.depend);
+            break;
+        case Pos_id.particle_Final:
+            return Poses(Pos.particle,Subpos1.Final);
+            break;
+        case Pos_id.particle_connect:
+            return Poses(Pos.particle,Subpos1.connect);
+            break;
+        case Pos_id.particle_special:
+            return Poses(Pos.particle,Subpos1.special);
+            break;
+        case Pos_id.particle_toAdverb:
+            return Poses(Pos.particle,Subpos1.toAdverb);
+            break;
+        case Pos_id.particle_adparticle:
+            return Poses(Pos.particle,Subpos1.adparticle);
+            break;
+        case Pos_id.particle_adpartParallelFinal:
+            return Poses(Pos.particle,Subpos1.adpartParallelFinal);
+            break;
+        case Pos_id.particle_parallel:
+            return Poses(Pos.particle,Subpos1.parallel);
+            break;
+        case Pos_id.particle_toRentai:
+            //TODO
         default:
             return Poses(Pos.unknown);
     }
