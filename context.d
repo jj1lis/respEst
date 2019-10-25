@@ -11,7 +11,9 @@ enum Type{
 
 enum Pos{
     //TODO
-    dammy,
+    enum 連体詞{
+
+    }
     unknown,
 };
 
@@ -19,6 +21,47 @@ enum Subpos{
     //TODO
     dammy,
     unknown,
+};
+
+enum Pos_id{
+    other,
+    filler,
+    interjection,
+    symbol_alphabet,
+    symbol_common,
+    symbol_bracketOpen,
+    symbol_bracketClose,
+    symbol_period,
+    symbol_blank,
+    symbol_reading,
+    adjective_independ,
+    adjective_suffix,
+    adjective_nonIndepend,
+    particle_case_common,
+    particle_case_quote,
+    particle_case_collocate,
+    particle_depend,
+    particle_final,
+    particle_connect,
+    particle_special,
+    particle_adverbize,
+    particle_adparticle,
+    particle_adpartParallelFinal,
+    particle_pallalel,
+    particle_solidize,
+    auxiVerb,//Auxiliary Verb
+    conjection,
+    prefix_adjectiveConnect,
+    prefix_numberConnect,
+    perfix_verbConnect,
+    prefix_nounConnect,
+    verb_independ,
+    verb_suffix,
+    verb_nonIndepend,
+    adverb_common,
+    adverb_particleConnect,
+    noun_SahenConnect,//No36 TODO
+
 };
 
 class NoTextNumberException:Exception{
@@ -81,6 +124,7 @@ class argumentNumberException:Exception{
         super("Invalid argument: "~reason~".");
     }
 }
+
 Pos stringToPos(string str_pos){
     switch(str_pos){
         case "dammy":
@@ -123,10 +167,29 @@ string SubposToString(Subpos subpos_str){
 
 class Meta{
     Type type;
-    int num;
+    private int num;
+    private int parent_num;
+    private int granpa_num
+
     this(Type target,int nu){
         type=target;
         num=nu;
+        parent_num=int.max;
+        granpa_num=int.max;
+    }
+
+    this(Type target,int nu,int pa_nu){
+        type=target;
+        num=nu;
+        parent_num=pa_nu;
+        granpa_num=int.max;
+    }
+
+    this(Type target,int nu,int pa_nu,int gpa_nu){
+        type=target;
+        num=nu;
+        parent_num=pa_nu;
+        granpa_nu=gpa_nu;
     }
 
     Type getType(){
@@ -135,8 +198,15 @@ class Meta{
     int getNumber(){
         return num;
     }
+    int getParentNumber(){
+        return parent_num;
+    }
+    int getGranpaNumber(){
+        return granpa_num;
+    }
 }
 
+/*
 class Word:Meta{
     private string mor; //morpheme
     private Pos pos;
@@ -166,18 +236,57 @@ class Word:Meta{
         return base;
     }
 };
+*/
+
+//if use Pos-id
+class Word:Meta{
+    private string mor; //morpheme
+    private Pos pos;
+    private Subpos subpos;
+    private int pos_id
+    private string base;
+    private int str_num;
+
+    this(string line_word,int number,int str_num,int text_num){
+        auto record=line_word.split(",");
+        mor=record[0];
+        try{
+        pos_id=to!int(record[1]);
+        pos=idToPos(pos_id);
+        subpos=idToSubpos(pos_id);
+        }catch{
+            throw new stringToIntException(record[1],num,str_num,text,num);
+        }
+        base=record[2];
+        super(Type.t_word,number,str_num,text_num);
+    }
+
+
+    string getMor(){
+        return mor;
+    }
+    Pos getPos(){
+        return pos;
+    }
+    Subpos getSubpos(){
+        return subpos;
+    }
+    string getBase(){
+        return base;
+    }
+};
 
 class Sentence:Meta{
     private Word[] words;
     private int score_stc;
 
-    this(string[] lines, int score,int number){
+    this(string[] lines, int score,int number,int text_num){
         score_stc=score;
         words=new Word[lines.length];
         for(int cnt=0;cnt<lines.length;cnt++){
-            words[cnt]=new Word(lines[cnt],cnt);
+            words[cnt]=new Word(lines[cnt],cnt,number,text_num);
         }
-        super(Type.t_stc,number);
+        super(Type.t_stc,number,text_num);
     }
 
     int getScore(){
@@ -209,7 +318,7 @@ class Text:Meta{
                     throw new scoreException(cnt_stc,number);
                 }
                 sentences.length++;
-                sentences[cnt_stc]=new Sentence(tmp_stc,score_stc,cnt_stc);
+                sentences[cnt_stc]=new Sentence(tmp_stc,score_stc,cnt_stc,number);
                 tmp_stc.length=0;
                 cnt_tmp=0;
                 cnt_stc++;
