@@ -2,202 +2,13 @@ import std.stdio;
 import std.file;
 import std.string;
 import std.conv;
+import pos;
 
 enum Type{
     t_word,
     t_stc,
     t_text,
 }
-
-enum Pos{
-    other,
-    filler,
-    interject,
-    symbol,
-    adject,
-    particle,
-    auxiVerb,
-    conject,
-    prefix,
-    verb,
-    adverb,
-    noun,
-    rentei,
-    unknown,
-    dummy,//DEBUG
-};
-
-enum Subpos1{
-    alphabet,
-    common,
-    brancketOpen,
-    brancketClose,
-    period,
-    blank,
-    reading,
-    independ,
-    suffix,
-    nonIndepend,
-    Case,
-    depend,
-    Final,
-    connect,
-    special,
-    toAdverb,
-    adparticle,
-    adpartParallelFinal,
-    parallel
-    toRentei,
-    auxiVerb,
-    conject,
-    adjectConnect,
-    numberConnect,
-    vervConnect,
-    nounConnect,
-    particleConnect,
-    SahenConnect,
-    NaiAdjectConnect,
-    quote,
-    adjectVerbStem,
-    proper,
-    number,
-    conjectic,
-    canAdverb,
-    none,
-    unknown,
-    dummy,//DEBUG
-};
-
-enum Subpos2{
-    common,
-    quote,
-    collcate,
-    name,
-    org,
-    area,
-    SahenConnect,
-    adjectVerbStem,
-    classifier,
-    auxiVerbStem,
-    special,
-    canAdverb,
-    none,
-    unknown,
-    dummy,//DEBUG
-}
-
-enum Subpos3{
-    common,
-    last,
-    first,
-    country,
-    none,
-    unknown,
-    dummy,//DEBUG
-}
-
-struct Poses{
-    Pos pos;
-    Subpos1 subpos1;
-    Subpos2 subpos2;
-    Subpos3 subpos3;
-    this(Pos p, Subpos1 s1,Subpos2 s2, Subpos3 s3){
-        pos=p;
-        subpos1=s1;
-        subpos2=s2;
-        subpos3=s3;
-    }
-    this(Pos p, Subpos1 s1,Subpos2 s2){
-        pos=p;
-        subpos1=s1;
-        subpos2=s2;
-        subpos3=Subpos3.none;
-    }
-    this(Pos p, Subpos1 s1){
-        pos=p;
-        subpos1=s1;
-        subpos2=Subpos2.none;
-        subpos3=Subpos3.none;
-    }
-    this(Pos p){
-        if(p==Pos.unknown){
-            pos=Pos.unknown;
-            subpos1=Subpos1.unknown;
-            subpos2=Subpos2.unknown;
-            subpos3=Subpos3.unknown;
-        }else{
-            pos=p;
-            subpos1=Subpos1.none;
-            subpos2=Subpos2.none;
-            subpos3=Subpos3.none;
-        }
-    }
-}
-
-enum Pos_id{
-    //jection,jective -> ject
-    other,
-    filler,
-    interject,
-    symbol_alphabet,
-    symbol_common,
-    symbol_bracketOpen,
-    symbol_bracketClose,
-    symbol_period,
-    symbol_blank,
-    symbol_reading,
-    adject_independ,
-    adject_suffix,
-    adject_nonIndepend,
-    particle_Case_common,
-    particle_Case_quote,
-    particle_Case_collocate,
-    particle_depend,
-    particle_Final,
-    particle_connect,
-    particle_special,
-    particle_toAdverb,
-    particle_adparticle,
-    particle_adpartParallelFinal,
-    particle_parallel,
-    particle_toRentai,
-    auxiVerb,//Auxiliary Verb
-    conject,
-    prefix_adjectConnect,
-    prefix_numberConnect,
-    perfix_verbConnect,
-    prefix_nounConnect,
-    verb_independ,
-    verb_suffix,
-    verb_nonIndepend,
-    adverb_common,
-    adverb_particleConnect,
-    noun_SahenConnect,
-    noun_NaiAdjectConnect,
-    noun_common,
-    noun_quote,
-    noun_adjectVerbStem,
-    noun_proper_common,
-    noun_proper_name_common,
-    noun_proper_name_last,
-    noun_proper_name_first,
-    noun_proper_org,
-    noun_proper_area_common,
-    noun_proper_area_country,
-    noun_number,
-    noun_conjectic,
-    noun_suffix_SahenConnect,
-    noun_suffix_common,
-    noun_suffix_adjectVerbStem,
-    noun_suffix_classifier,
-    noun_suffix_auxiVerbStem,
-    noun_suffix_name,
-    noun_suffix_area,
-    noun_suffix_special,
-    noun_suffix_canAdverb,
-    noun_canAdverb,
-    rentai,
-};
 
 class NoTextNumberException:Exception{
     this(int num){
@@ -260,145 +71,6 @@ class argumentNumberException:Exception{
     }
 }
 
-/*
-   Pos stringToPos(string str_pos){
-   switch(str_pos){
-   case "dummy":
-   return Pos.dummy;//TODO
-   break;
-   default:
-   return Pos.unknown;
-   }
-   }
-
-
-   Subpos stringToSubpos(string str_subpos){
-   switch(str_subpos){
-   case "dummy":
-   return Subpos.dummy;//TODO
-   break;
-   default:
-   return Subpos.unknown;
-   }
-   }
- */
-string PosToString(Pos pos_str){
-    switch(pos_str){
-        case Pos.dummy:
-            return "dummy";//TODO
-            break;
-        default:
-            return "unknown";
-    }
-}
-
-string Subpos1ToString(Subpos1 subpos_str){
-    switch(subpos_str){
-        case Subpos1.dummy:
-            return "dummy";//TODO
-            break;
-        default:
-            return "unknown";
-    }
-}
-string Subpos2ToString(Subpos2 subpos_str){
-    switch(subpos_str){
-        case Subpos2.dummy:
-            return "dummy";//TODO
-            break;
-        default:
-            return "unknown";
-    }
-}
-string Subpos3ToString(Subpos3 subpos_str){
-    switch(subpos_str){
-        case Subpos3.dummy:
-            return "dummy";//TODO
-            break;
-        default:
-            return "unknown";
-    }
-}
-
-
-Poses idToPoses(int id){
-    switch(id){
-        case Pos_id.other:
-            return Poses(Pos.other);
-            break;
-        case Pos_id.filler:
-            return Poses(Pos.filler);
-            break;
-        case Pos_id.interject:
-            return Poses(Pos.interject);
-            break;
-        case Pos_id.symbol_alphabet:
-            return Poses(Pos.symbol,Subpos1.alphabet);
-            break;
-        case Pos_id.symbol_common:
-            return Poses(Pos.symbol,Subpos1.common);
-            break;
-        case Pos_id.symbol_bracketOpen:
-            return Poses(Pos.symbol,Subpos1.brancketOpen);
-            break;
-        case Pos_id.symbol_bracketClose:
-            return Poses(Pos.symbol,Subpos1.brancketClose);
-            break;
-        case Pos_id.symbol_period:
-            return Poses(Pos.symbol,Subpos1.period);
-            break;
-        case Pos_id.symbol_reading:
-            return Poses(Pos.symbol,Subpos1.reading);
-            break;
-        case Pos_id.adject_independ:
-            return Poses(Pos.adject,Subpos1.independ);
-            break;
-        case Pos_id.adject_suffix:
-            return Poses(Pos.adject,Subpos1.suffix);
-            break;
-        case Pos_id.adject_nonIndepend:
-            return Poses(Pos.adject,Subpos1.nonIndepend);
-            break;
-        case Pos_id.particle_Case_common:
-            return Poses(Pos.particle,Subpos1.Case,Subpos2.common);
-            break;
-        case Pos_id.particle_Case_quote:
-            return Poses(Pos.particle,Subpos1.Case,Subpos2.quote);
-            break;
-        case Pos_id.particle_Case_collocate:
-            return Poses(Pos.particle,Subpos1.Case,Subpos2.collcate);
-            break;
-        case Pos_id.particle_depend:
-            return Poses(Pos.particle,Subpos1.depend);
-            break;
-        case Pos_id.particle_Final:
-            return Poses(Pos.particle,Subpos1.Final);
-            break;
-        case Pos_id.particle_connect:
-            return Poses(Pos.particle,Subpos1.connect);
-            break;
-        case Pos_id.particle_special:
-            return Poses(Pos.particle,Subpos1.special);
-            break;
-        case Pos_id.particle_toAdverb:
-            return Poses(Pos.particle,Subpos1.toAdverb);
-            break;
-        case Pos_id.particle_adparticle:
-            return Poses(Pos.particle,Subpos1.adparticle);
-            break;
-        case Pos_id.particle_adpartParallelFinal:
-            return Poses(Pos.particle,Subpos1.adpartParallelFinal);
-            break;
-        case Pos_id.particle_parallel:
-            return Poses(Pos.particle,Subpos1.parallel);
-            break;
-        case Pos_id.particle_toRentai:
-            //TODO
-        default:
-            return Poses(Pos.unknown);
-    }
-}
-
 class Meta{
     Type type;
     private int num;
@@ -440,39 +112,6 @@ class Meta{
     }
 }
 
-/*
-   class Word:Meta{
-   private string mor; //morpheme
-   private Pos pos;
-   private Subpos subpos;
-   private string base;
-
-   this(string line_word,int number){
-   auto record=line_word.split(",");
-   mor=record[0];
-   pos=stringToPos(record[1]);
-   subpos=stringToSubpos(record[2]);
-   base=record[3];
-   super(Type.t_word,number);
-   }
-
-
-   string getMor(){
-   return mor;
-   }
-   Pos getPos(){
-   return pos;
-   }
-   Subpos getSubpos(){
-   return subpos;
-   }
-   string getBase(){
-   return base;
-   }
-   };
- */
-
-//if use Pos-id
 class Word:Meta{
     private string mor; //morpheme
     private Poses poses;
@@ -609,8 +248,8 @@ void writeText(string writefile,Text target){
             Word target_word=target_stc.words[cnt_word];
             append(writefile,target_word.getMor()~","~target_word.getPoses.pos.PosToString~
                     ","~target_word.getPoses.subpos1.Subpos1ToString~","~target_word.getPoses.subpos2.Subpos2ToString~
-                    target_word.getPoses.subpos3.Subpos3ToString~target_word.getBase()~"\n");
-        } 
+                    ","~target_word.getPoses.subpos3.Subpos3ToString~","~target_word.getBase()~"\n");
+        }
         append(writefile,"%,"~to!string(target_stc.getNumber())~
                 ","~to!string(target_stc.getScore)~"\n");
     }
@@ -640,6 +279,4 @@ void main(string[] args){
         writeText(args[1]~".ctx",text);
 
     }
-
-    //"Hello!!".writeln;
 }
