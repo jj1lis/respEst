@@ -4,7 +4,6 @@ import std.string;
 import std.conv;
 import pos;
 
-//hoi!
 enum Type{
     t_word,
     t_stc,

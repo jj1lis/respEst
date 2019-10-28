@@ -1,3 +1,4 @@
+//Hoi!
 enum Pos{
     other,
     filler,
