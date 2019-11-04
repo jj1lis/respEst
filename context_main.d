@@ -37,8 +37,11 @@ string[] separateText(string[] file_lines,int text_num){//TODO!:This dumps myst 
     throw new NoTextNumberException(text_num);
 }
 
-
 void writeText(string writefile,Text target){
+    if(exists(writefile)&&isFile(writefile)){
+        remove(writefile);
+    }
+
     for(int cnt_stc=0;cnt_stc<target.getSentences.length;cnt_stc++){
         Sentence target_stc=target.getSentences[cnt_stc];
         for(int cnt_word=0;cnt_word<target_stc.getWords.length;cnt_word++){
@@ -79,6 +82,5 @@ void main(string[] args){
         }
         text.setScore(calculateTextScore(text));
         writeText(args[1]~".ctx",text);
-
     }
 }

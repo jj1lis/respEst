@@ -44,3 +44,11 @@ class argumentNumberException:Exception{
         super("Invalid argument: "~reason~".");
     }
 }
+
+class NeuronInitializeException:Exception{
+    this(int input_len,int weight_len,int number,string layer){
+        super("Number of inputs,"~input_len.to!string~
+                " is different from number of weights,"~weight_len.to!string~
+                " in Neuron "~number.to!string~", Layer "~layer);
+    }
+}
