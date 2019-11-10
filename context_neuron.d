@@ -1,4 +1,5 @@
 import std.file;
+import std.string;
 import context_exception;
 
 enum Layer{
@@ -95,35 +96,36 @@ class OutputNeuron:Neuron{
     }
 }
 
-string[] pickTag(string[] str,string tag,char marker){
-    char marker_end;
-    switch(marker){
-        case '<':
-            marker_end='>';
-            break;
-        case '[':
-            marker_end=']';
-            break;
-        default:
-            assert(0);
-    }
-    string start=marker~tag~marker_end;
-    string end=marker~'/'~tag~marker_end;
-    string[] content;
-    for//TODO
-}
 
 class Stat{
+    string[] readIndex(string[] file,string index){
+        string[] content;
+        bool flag=false;
+        for(int cnt=0;cnt<file.length;cnt++){
+            if(flag){
+                content~=file[cnt].strip.toLower;
+            }
+
+            if(indexOf(file[cnt],'['~index~']')!=1){
+                flag=true;
+            }
+
+            if(indexOf(file[cnt],"[/"~index~']')!=1){
+                flag=false;
+            }
+        }
+        return content;
+    }
+
     this(string read_file){
-        string file_whole[];
+        string[] file_whole;
         try{
             file_whole=readText(read_file).splitLines;
         }catch(FileException fe){
             throw new FileException(read_file,"Faild to open File");
         }
-        for(int cnt=0;cnt<file_whole.length;cnt++){
-            if(indexOf(file_whole[cnt],"[meta]"))
-        }
+        string[] meta=readIndex(file_whole,"meta");
+        string[] data=readIndex(file_whole,"data");
     }
 }
 
