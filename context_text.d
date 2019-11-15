@@ -5,6 +5,7 @@ import context_pos;
 
 enum Type{
     t_word,
+    t_phrase,
     t_stc,
     t_text,
 };
@@ -30,12 +31,14 @@ class Meta{
     private int num;
     private int parent_num;
     private int granpa_num;
+    private int dgranpa_num;
 
     this(Type target,int nu){
         type=target;
         num=nu;
         parent_num=int.max;
         granpa_num=int.max;
+        dgranpa_num=int.max;
     }
 
     this(Type target,int nu,int pa_nu){
@@ -43,6 +46,7 @@ class Meta{
         num=nu;
         parent_num=pa_nu;
         granpa_num=int.max;
+        dgranpa_num=int.max;
     }
 
     this(Type target,int nu,int pa_nu,int gpa_nu){
@@ -50,6 +54,15 @@ class Meta{
         num=nu;
         parent_num=pa_nu;
         granpa_num=gpa_nu;
+        dgranpa_num=int.max;
+    }
+
+    this(Type target,int nu,int pa_nu,int gpa_nu,int dgpa_nu){
+        type=target;
+        num=nu;
+        parent_num=pa_nu;
+        granpa_num=gpa_nu;
+        dgranpa_num=dgpa_nu;
     }
 
     Type getType(){
@@ -73,7 +86,7 @@ class Word:Meta{
     private string base;
     private int str_num;
 
-    this(string line_word,int number,int str_num,int text_num){
+    this(string line_word,int number,int stc_num,int text_num){
         auto record=line_word.split(",");
         mor=record[0];
         try{
@@ -83,13 +96,13 @@ class Word:Meta{
             throw new stringToIntException(record[1],num,str_num,text_num);
         }
         base=record[2];
-        super(Type.t_word,number,str_num,text_num);
+        super(Type.t_word,number,stc_num,text_num);
     }
-
 
     string getMor(){
         return mor;
     }
+
     Poses getPoses(){
         return poses;
     }
@@ -99,8 +112,30 @@ class Word:Meta{
     }
 };
 
-class Sentence:Meta{
+class Phrase:Meta{
     private Word[] words;
+    private int dependency;
+    
+    this(string[] lines,int num,int stc_num,int text_num,int depend_to){
+        dependency=depend_to;
+        words=new Word[lines.length];
+        for(int cnt=0;cnt<lines.length;cnt++){
+            words[cnt]=new Word(lines[cnt],cnt,number,stc_number,text_num);
+        }
+        super(Type.t_phrase,number,stc_num,text_num);
+    }
+
+    Words[] getWords(){
+        return words;
+    }
+
+    int getDependency(){
+        return dependency;
+    }
+}
+
+class Sentence:Meta{    //TODO!!
+    private Phrase phrases;
     private int score_stc;
 
     this(string[] lines, int score,int number,int text_num){
