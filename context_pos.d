@@ -51,6 +51,8 @@ enum Subpos1{
     number,
     conjectic,
     canAdverb,
+    pronoun,
+    verbIndepentic,
     none,
     unknown,
 };
@@ -68,6 +70,7 @@ enum Subpos2{
     auxiVerbStem,
     special,
     canAdverb,
+    contraction,
     none,
     unknown,
 }
@@ -83,67 +86,75 @@ enum Subpos3{
 
 enum Pos_id{
     //jection,jective -> ject
-    other,
-    filler,
-    interject,
-    symbol_alphabet,
-    symbol_common,
-    symbol_bracketOpen,
-    symbol_bracketClose,
-    symbol_period,
-    symbol_blank,
-    symbol_reading,
-    adject_independ,
-    adject_suffix,
-    adject_nonIndepend,
-    particle_Case_common,
-    particle_Case_quote,
-    particle_Case_collocate,
-    particle_depend,
-    particle_Final,
-    particle_connect,
-    particle_special,
-    particle_toAdverb,
-    particle_adparticle,
-    particle_adpartParallelFinal,
-    particle_parallel,
-    particle_toRentai,
-    auxiVerb,//Auxiliary Verb
-    conject,
-    prefix_adjectConnect,
-    prefix_numberConnect,
-    prefix_verbConnect,
-    prefix_nounConnect,
-    verb_independ,
-    verb_suffix,
-    verb_nonIndepend,
-    adverb_common,
-    adverb_particleConnect,
-    noun_SahenConnect,
-    noun_NaiAdjectConnect,
-    noun_common,
-    noun_quote,
-    noun_adjectVerbStem,
-    noun_proper_common,
-    noun_proper_name_common,
-    noun_proper_name_last,
-    noun_proper_name_first,
-    noun_proper_org,
-    noun_proper_area_common,
-    noun_proper_area_country,
-    noun_number,
-    noun_conjectic,
-    noun_suffix_SahenConnect,
-    noun_suffix_common,
-    noun_suffix_adjectVerbStem,
-    noun_suffix_classifier,
-    noun_suffix_auxiVerbStem,
-    noun_suffix_name,
-    noun_suffix_area,
-    noun_suffix_special,
-    noun_suffix_canAdverb,
-    noun_canAdverb,
-    rentai,
+    other=0,
+    filler=1,
+    interject=2,
+    symbol_alphabet=3,
+    symbol_common=4,
+    symbol_bracketOpen=5,
+    symbol_bracketClose=6,
+    symbol_period=7,
+    symbol_blank=8,
+    symbol_reading=9,
+    adject_independ=10,
+    adject_suffix=11,
+    adject_nonIndepend=12,
+    particle_Case_common=13,
+    particle_Case_quote=14,
+    particle_Case_collocate=15,
+    particle_depend=16,
+    particle_Final=17,
+    particle_connect=18,
+    particle_special=19,
+    particle_toAdverb=20,
+    particle_adparticle=21,
+    particle_adpartParallelFinal=22,
+    particle_parallel=23,
+    particle_toRentai=24,
+    auxiVerb=25,//Auxiliary Verb
+    conject=26,
+    prefix_adjectConnect=27,
+    prefix_numberConnect=28,
+    prefix_verbConnect=29,
+    prefix_nounConnect=30,
+    verb_independ=31,
+    verb_suffix=32,
+    verb_nonIndepend=33,
+    adverb_common=34,
+    adverb_particleConnect=35,
+    noun_SahenConnect=36,
+    noun_NaiAdjectConnect=37,
+    noun_common=38,
+    noun_quote=39,
+    noun_adjectVerbStem=40,
+    noun_proper_common=41,
+    noun_proper_name_common=42,
+    noun_proper_name_last=43,
+    noun_proper_name_first=44,
+    noun_proper_org=45,
+    noun_proper_area_common=46,
+    noun_proper_area_country=47,
+    noun_number=48,
+    noun_conjectic=49,
+    noun_suffix_SahenConnect=50,
+    noun_suffix_common=51,
+    noun_suffix_adjectVerbStem=52,
+    noun_suffix_classifier=53,
+    noun_suffix_auxiVerbStem=54,
+    noun_suffix_name=55,
+    noun_suffix_area=56,
+    noun_suffix_special=57,
+    noun_suffix_canAdverb=58,
+    noun_pronoun_common=59,
+    noun_pronoun_contraction=60,
+    noun_verbIndepentic=61,
+    noun_special_auxiVerbStem=62,
+    noun_independ_common=63,
+    noun_independ_adjectVerbStem=64,
+    noun_independ_auxiVerbStem=65,
+    noun_independ_canAdberb=66,
+    noun_canAdverb=67,
+    rentai=68,
 };
 
 struct Poses{
@@ -289,6 +300,10 @@ string Subpos1ToString(Subpos1 sp1){
             return "conjectic";
         case Subpos1.canAdverb:
             return "canAdverb";
+        case Subpos1.pronoun:
+            return "pronoun";
+        case Subpos1.verbIndepentic:
+            return "verbIndepentic";
         case Subpos1.none:
             return "*";
         default:
@@ -322,6 +337,8 @@ string Subpos1ToString(Subpos1 sp1){
             return "special";
         case Subpos2.canAdverb:
             return "canAdverb";
+        case Subpos2.contraction:
+            return "contraction";
         case Subpos2.none:
             return "*";
         default:
@@ -466,6 +483,24 @@ string Subpos1ToString(Subpos1 sp1){
             return Poses(Pos.noun,Subpos1.suffix,Subpos2.special);
         case Pos_id.noun_suffix_canAdverb:
             return Poses(Pos.noun,Subpos1.suffix,Subpos2.canAdverb);
+        case Pos_id.noun_pronoun_common:
+            return Poses(Pos.noun,Subpos1.pronoun,Subpos2.common);
+        case Pos_id.noun_pronoun_contraction:
+            return Poses(Pos.noun,Subpos1.pronoun,Subpos2.contraction);
+        case Pos_id.noun_verbIndepentic:
+            return Poses(Pos.noun,Subpos1.verbIndepentic);
+        case Pos_id.noun_special_auxiVerbStem:
+             return Poses(Pos.noun,Subpos1.special,Subpos2.auxiVerbStem);
+        case Pos_id.noun_independ_common:
+            return Poses(Pos.noun,Subpos1.independ,Subpos2.common);
+        case Pos_id.noun_independ_adjectVerbStem:
+            return Poses(Pos.noun,Subpos1.independ,Subpos2.adjectVerbStem);
+        case Pos_id.noun_independ_auxiVerbStem:
+            return Poses(Pos.noun,Subpos1.independ,Subpos2.auxiVerbStem);
+        case Pos_id.noun_independ_canAdberb:
+            return Poses(Pos.noun,Subpos1.independ,Subpos2.canAdverb);
+        case Pos_id.noun_canAdverb:
+            return Poses(Pos.noun,Subpos1.canAdverb);
         case Pos_id.rentai:
             return Poses(Pos.rentai);
         default:

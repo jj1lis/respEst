@@ -8,8 +8,6 @@ import context_cal;
 import context_pos;
 
 
-
-
 string[] devideFileByLine(string filename){
     try{
         return readText(filename).splitLines;
@@ -44,22 +42,42 @@ void writeText(string writefile,Text target){
 
     for(int cnt_stc=0;cnt_stc<target.getSentences.length;cnt_stc++){
         Sentence target_stc=target.getSentences[cnt_stc];
-        for(int cnt_word=0;cnt_word<target_stc.getWords.length;cnt_word++){
-            Word target_word=target_stc.getWords[cnt_word];
-            append(writefile,target_word.getMor()~","~target_word.getPoses.pos.PosToString~
-                    ","~target_word.getPoses.subpos1.Subpos1ToString~","~target_word.getPoses.subpos2.Subpos2ToString~
-                    ","~target_word.getPoses.subpos3.Subpos3ToString~","~target_word.getBase()~"\n");
+        for(int cnt_phrase=0;cnt_phrase<target_stc.getPhrases.length;cnt_phrase++){
+            Phrase target_phrase=target_stc.getPhrases[cnt_phrase]; 
+            for(int cnt_word=0;cnt_word<target_phrase.getWords.length;cnt_word++){
+                Word target_word=target_phrase.getWords[cnt_word];
+                append(writefile,target_word.getMor()~","~target_word.getPoses.pos.PosToString~
+                        ","~target_word.getPoses.subpos1.Subpos1ToString~","~target_word.getPoses.subpos2.Subpos2ToString~
+                        ","~target_word.getPoses.subpos3.Subpos3ToString~","~target_word.getBase()~"\n");
+            }
+            append(writefile,"$,"~to!string(target_phrase.getNumber)~
+                    ","~to!string(target_phrase.getDependency)~"\n");
         }
-        append(writefile,"%,"~to!string(target_stc.getNumber())~
+        append(writefile,"%,"~to!string(target_stc.getNumber)~
                 ","~to!string(target_stc.getScore)~"\n");
     }
-    append(writefile,"#,"~to!string(target.getNumber())~
+    append(writefile,"#,"~to!string(target.getNumber)~
             ","~to!string(target.getScore)~"\n");
 }
 
 int calculateTextScore(Text target){
     //TODO
     return 0;//DENUG
+}
+
+void debugSpace(Text target){
+    string[] text=new string[0];
+    foreach(Sentence s;target.getSentences){
+        foreach(Phrase p;s.getPhrases){
+            foreach(Word w;p.getWords){
+                text~=w.getMor;
+            }
+        }
+    }
+    foreach(string s;text){
+        s.write;
+    }
+    "\n".write;
 }
 
 void main(string[] args){
@@ -82,5 +100,7 @@ void main(string[] args){
         }
         text.setScore(calculateTextScore(text));
         writeText(args[1]~".ctx",text);
+
+        debugSpace(text);
     }
 }
