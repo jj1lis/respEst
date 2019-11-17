@@ -77,6 +77,9 @@ class Meta{
     int getGranpaNumber(){
         return granpa_num;
     }
+    int getDgranpaNumber(){
+        return dgranpa_num;
+    }
 }
 
 class Word:Meta{
@@ -86,17 +89,18 @@ class Word:Meta{
     private string base;
     private int str_num;
 
-    this(string line_word,int number,int stc_num,int text_num){
+    this(string line_word,int number,int phrase_num,int stc_num,int text_num){
+        super(Type.t_word,number,phrase_num,stc_num,text_num);
         auto record=line_word.split(",");
         mor=record[0];
         try{
             pos_id=to!int(record[1]);
             poses=idToPoses(pos_id);
         }catch{
-            throw new stringToIntException(record[1],num,str_num,text_num);
+            throw new stringToIntException(record[1],getNumber,
+                    getParentNumber,getGranpaNumber,getDgranpaNumber);
         }
         base=record[2];
-        super(Type.t_word,number,stc_num,text_num);
     }
 
     string getMor(){
@@ -117,15 +121,15 @@ class Phrase:Meta{
     private int dependency;
     
     this(string[] lines,int num,int stc_num,int text_num,int depend_to){
+        super(Type.t_phrase,num,stc_num,text_num);
         dependency=depend_to;
         words=new Word[lines.length];
         for(int cnt=0;cnt<lines.length;cnt++){
-            words[cnt]=new Word(lines[cnt],cnt,number,stc_number,text_num);
+            words[cnt]=new Word(lines[cnt],cnt,getNumber,getParentNumber,getGranpaNumber);
         }
-        super(Type.t_phrase,number,stc_num,text_num);
     }
 
-    Words[] getWords(){
+    Word[] getWords(){
         return words;
     }
 
@@ -135,20 +139,45 @@ class Phrase:Meta{
 }
 
 class Sentence:Meta{    //TODO!!
-    private Phrase phrases;
+    private Phrase[] phrases;
     private int score_stc;
 
     this(string[] lines, int score,int number,int text_num){
-        score_stc=score;
-        words=new Word[lines.length];
-        for(int cnt=0;cnt<lines.length;cnt++){
-            words[cnt]=new Word(lines[cnt],cnt,number,text_num);
-        }
         super(Type.t_stc,number,text_num);
+        score_stc=score;
+        phrases=new Phrase[0];
+        string[] tmp_phrase=new string[0];
+        int cnt_phrase=0;
+        for(int cnt=0;cnt<lines.length;cnt++){
+            if(lines[cnt].split(",")[0]!="$"){
+                tmp_phrase~=lines[cnt];
+            }else{
+                bool exflag=false;
+                int phrase_num,dependency;
+                try{
+                    phrase_num=lines[cnt].split(',')[1].to!(int);
+                    dependency=lines[cnt].split(',')[2].to!(int);
+                }catch{
+                    exflag=true;
+                    throw new stringToIntException("element in phrase",
+                            cnt_phrase,getNumber,getParentNumber);
+                }
+                if(exflag){
+                    phrases~=new Phrase(tmp_phrase,cnt_phrase,
+                            getNumber,getParentNumber,-1);
+                }else{
+                    int diff=phrase_num-cnt_phrase;
+                    phrases~=new Phrase(tmp_phrase,phrase_num-diff,
+                            getNumber,getParentNumber,dependency-diff);
+                }
+                tmp_phrase.length=0;
+                cnt_phrase++;
+            }
+        }
     }
 
-    Word[] getWords(){
-        return words;
+    Phrase[] getPhrases(){
+        return phrases;
     }
 
     int getScore(){
@@ -161,32 +190,28 @@ class Text:Meta{
     private int score_text;
 
     this(string[] lines,int number){
+        super(Type.t_text,number);
         sentences=new Sentence[0];
         string[] tmp_stc=new string[0];
-        int cnt,cnt_tmp,cnt_stc;
-        for(cnt=cnt_tmp=cnt_stc=0;cnt<lines.length;cnt++){
+        int cnt,cnt_stc;
+        for(cnt=cnt_stc=0;cnt<lines.length;cnt++){
             if(lines[cnt].split(",")[0]!="%"){
-                tmp_stc.length++;
-                tmp_stc[cnt_tmp]=lines[cnt];
-                cnt_tmp++;
+                tmp_stc~=lines[cnt];
             }else{
                 int score_stc;
                 try{
                     score_stc=to!int(lines[cnt].split(",")[1]);
                 }catch{
-                    throw new stringToIntException(lines[cnt].split(",")[1],cnt_stc,num);
+                    throw new stringToIntException(lines[cnt].split(",")[1],cnt_stc,getNumber);
                 }
                 if(score_stc<-100||score_stc>100){
                     throw new scoreException(cnt_stc,number);
                 }
-                sentences.length++;
-                sentences[cnt_stc]=new Sentence(tmp_stc,score_stc,cnt_stc,number);
+                sentences~=new Sentence(tmp_stc,score_stc,cnt_stc,number);
                 tmp_stc.length=0;
-                cnt_tmp=0;
                 cnt_stc++;
             }
         }
-        super(Type.t_text,number);
     }
     
     Sentence[] getSentences(){

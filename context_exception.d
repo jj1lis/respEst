@@ -18,8 +18,13 @@ class stringToIntException:Exception{
         super(msg);
     }
 
-    this(string str,int word,int stc,int text){
-        string msg="\""~str~"\" cannot be converted from \'string\' to \'int\' in word "~to!string(word)~",sentence "~to!string(stc)~",text "~to!string(text)~".";
+    this(string str,int phrase,int stc,int text){
+        string msg="\""~str~"\" cannot be converted from \'string\' to \'int\' in phrase "~to!string(phrase)~",sentence "~to!string(stc)~",text "~to!string(text)~".";
+        super(msg);
+    }
+
+    this(string str,int word,int phrase,int stc,int text){
+        string msg="\""~str~"\" cannot be converted from \'string\' to \'int\' in word "~to!string(word)~",phrase "~to!string(phrase)~",sentence "~to!string(stc)~",text "~to!string(text)~".";
         super(msg);
     }
 }
@@ -33,8 +38,8 @@ class scoreException:Exception{
         string cursor="sentence "~to!string(stc)~",text "~to!string(text);
         super(cursor~": score must be in range -100 ~ 100.");
     }
-    this(int word,int stc,int text){
-        string cursor="word "~to!string(word)~",sentence "~to!string(stc)~",text "~to!string(text);
+    this(int word,int phrase,int stc,int text){
+        string cursor="word "~to!string(word)~",phrase "~to!string(phrase)~",sentence "~to!string(stc)~",text "~to!string(text);
         super(cursor~": score must be in range -100 ~ 100.");
     }
 }
