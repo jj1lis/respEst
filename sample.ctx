@@ -12,7 +12,7 @@ $,2,3
 です,auxiVerb,*,*,*,です
 。,symbol,period,*,*,。
 $,3,6
-%,0,100
+%,0,-0.5
 あなた,noun,pronoun,common,*,あなた
 も,particle,depend,*,*,も
 $,0,2
@@ -24,5 +24,5 @@ $,1,2
 か,particle,adpartParallelFinal,*,*,か
 。,symbol,period,*,*,。
 $,2,-5
-%,1,50
+%,1,0.8
 #,0,0
