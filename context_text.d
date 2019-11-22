@@ -1,3 +1,4 @@
+import std.stdio;
 import std.string;
 import std.conv;
 import context_exception;
@@ -119,16 +120,19 @@ class Word:Meta{
 class Phrase:Meta{
     private Word[] words;
     private int dependency;
-    private uint weight;
-    
+    private uint weight=0;
+
     this(string[] lines,int num,int stc_num,int text_num,int depend_to){
         super(Type.t_phrase,num,stc_num,text_num);
         dependency=depend_to;
         words=new Word[lines.length];
         for(int cnt=0;cnt<lines.length;cnt++){
-            words[cnt]=new Word(lines[cnt],cnt,getNumber,getParentNumber,getGranpaNumber);
+            try{
+                words[cnt]=new Word(lines[cnt],cnt,getNumber,getParentNumber,getGranpaNumber);
+            }catch(stringToIntException stie){
+                stderr.writeln("error: "~stie.msg);
+            }
         }
-        weight=0;
     }
 
     Word[] getWords(){
@@ -190,14 +194,14 @@ class Sentence:Meta{    //TODO!!
         return phrases;
     }
 
-    int getScore(){
+    float getScore(){
         return score_stc;
     }
 };
 
 class Text:Meta{
     private Sentence[] sentences;
-    private int score_text;
+    private int score_text=0;
 
     this(string[] lines,int number){
         super(Type.t_text,number);
@@ -208,22 +212,26 @@ class Text:Meta{
             if(lines[cnt].split(",")[0]!="%"){
                 tmp_stc~=lines[cnt];
             }else{
-                int score_stc;
+                float score_stc;
                 try{
                     score_stc=to!float(lines[cnt].split(",")[1]);
                 }catch{
-                    throw new stringToIntException(lines[cnt].split(",")[1],cnt_stc,getNumber);
+                    throw new stringToFloatException(lines[cnt].split(",")[1],cnt_stc,getNumber);
                 }
                 if(score_stc<-1.||score_stc>1.){
-                    throw new scoreException(cnt_stc,number);
+                    throw new scoreException(-1.,1.,cnt_stc,number);
                 }
-                sentences~=new Sentence(tmp_stc,score_stc,cnt_stc,number);
+                try{
+                    sentences~=new Sentence(tmp_stc,score_stc,cnt_stc,number);
+                }catch(stringToIntException stie){
+                    stderr.writeln("error: "~stie.msg);
+                }
                 tmp_stc.length=0;
                 cnt_stc++;
             }
         }
     }
-    
+
     Sentence[] getSentences(){
         return sentences;
     }
@@ -234,7 +242,7 @@ class Text:Meta{
 
     void setScore(int score){
         if(score<-100||score>100){
-            throw new scoreException(type,num);
+            throw new scoreException(-100,100,type,num);
         }else{
             score_text=score;
         }

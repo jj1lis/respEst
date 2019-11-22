@@ -6,7 +6,7 @@ enum Pos{
     adject,
     particle,
     auxiVerb,
-    conjunct,
+    conject,
     prefix,
     verb,
     adverb,
@@ -37,7 +37,7 @@ enum Subpos1{
     parallel,
     toRentei,
     auxiVerb,
-    conjunct,
+    conject,
     adjectConnect,
     numberConnect,
     verbConnect,
@@ -49,7 +49,7 @@ enum Subpos1{
     adjectVerbStem,
     proper,
     number,
-    conjunctic,
+    conjectic,
     canAdverb,
     pronoun,
     verbIndepentic,
@@ -112,7 +112,7 @@ enum Pos_id{
     particle_parallel=23,
     particle_toRentai=24,
     auxiVerb=25,//Auxiliary Verb
-    conjunct=26,
+    conject=26,
     prefix_adjectConnect=27,
     prefix_numberConnect=28,
     prefix_verbConnect=29,
@@ -135,7 +135,7 @@ enum Pos_id{
     noun_proper_area_common=46,
     noun_proper_area_country=47,
     noun_number=48,
-    noun_conjunctic=49,
+    noun_conjectic=49,
     noun_suffix_SahenConnect=50,
     noun_suffix_common=51,
     noun_suffix_adjectVerbStem=52,
@@ -211,8 +211,8 @@ struct Poses{
             return "particle";
         case Pos.auxiVerb:
             return "auxiVerb";
-        case Pos.conjunct:
-            return "conjunct";
+        case Pos.conject:
+            return "conject";
         case Pos.prefix:
             return "prefix";
         case Pos.verb:
@@ -272,8 +272,8 @@ string Subpos1ToString(Subpos1 sp1){
             return "toRentai";
         case Subpos1.auxiVerb:
             return "auxiVerb";
-        case Subpos1.conjunct:
-            return "conjunct";
+        case Subpos1.conject:
+            return "conject";
         case Subpos1.adjectConnect:
             return "adjectConnect";
         case Subpos1.numberConnect:
@@ -296,8 +296,8 @@ string Subpos1ToString(Subpos1 sp1){
             return "proper";
         case Subpos1.number:
             return "number";
-        case Subpos1.conjunctic:
-            return "conjunctic";
+        case Subpos1.conjectic:
+            return "conjectic";
         case Subpos1.canAdverb:
             return "canAdverb";
         case Subpos1.pronoun:
@@ -417,8 +417,8 @@ string Subpos1ToString(Subpos1 sp1){
             return Poses(Pos.particle,Subpos1.toRentei);
         case Pos_id.auxiVerb:
             return Poses(Pos.auxiVerb);
-        case Pos_id.conjunct:
-            return Poses(Pos.conjunct);
+        case Pos_id.conject:
+            return Poses(Pos.conject);
         case Pos_id.prefix_adjectConnect:
             return Poses(Pos.prefix,Subpos1.adjectConnect);
         case Pos_id.prefix_numberConnect:
@@ -463,8 +463,8 @@ string Subpos1ToString(Subpos1 sp1){
             return Poses(Pos.noun,Subpos1.proper,Subpos2.area,Subpos3.country);
         case Pos_id.noun_number:
             return Poses(Pos.noun,Subpos1.number);
-        case Pos_id.noun_conjunctic:
-            return Poses(Pos.noun,Subpos1.conjunctic);
+        case Pos_id.noun_conjectic:
+            return Poses(Pos.noun,Subpos1.conjectic);
         case Pos_id.noun_suffix_SahenConnect:
             return Poses(Pos.noun,Subpos1.suffix,Subpos2.SahenConnect);
         case Pos_id.noun_suffix_common:

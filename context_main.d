@@ -12,11 +12,11 @@ string[] devideFileByLine(string filename){
     try{
         return readText(filename).splitLines;
     }catch(FileException fe){
-        throw new FileException(filename,"Failed to open File");
+        throw new FileException(filename,"failed to open file");
     }
 }
 
-string[] separateText(string[] file_lines,int text_num){//TODO!:This dumps myst bugs
+string[] separateText(string[] file_lines,int text_num){//todo!:this dumps myst bugs
     string[] tmp_text=new string[0];
     int cnt_text=0;
     for(int cnt=0;cnt<file_lines.length;cnt++){
@@ -31,7 +31,6 @@ string[] separateText(string[] file_lines,int text_num){//TODO!:This dumps myst 
             cnt_text=0;
         }
     }
-
     throw new NoTextNumberException(text_num);
 }
 
@@ -81,19 +80,24 @@ void main(string[] args){
     }else if(args.length>2){
         stderr.writeln("error: "~new argumentNumberException("arguments are too many").msg);
     }else{
-        //writeln("DEBUG:ok");
+        //writeln("debug:ok");
         int read_text_num=0;
         Text text;
         try{
             text=new Text(separateText(devideFileByLine(args[1]),read_text_num),read_text_num);
+        }catch(stringToIntException stie){
+            stderr.writeln("error: "~stie.msg);
         }catch(FileException fe){
             stderr.writeln("erorr: "~fe.msg);
         }catch(NoTextNumberException ntne){
             stderr.writeln("error: "~ntne.msg);
-        }catch(stringToIntException stie){
-            stderr.writeln("error: "~stie.msg);
+        }catch(stringToFloatException stfe){
+            stderr.writeln("error: "~stfe.msg);
+        }catch(scoreException se){
+            stderr.writeln("error: "~se.msg);
         }
-        text.setScore(calculateTextScore(text));
+
+        calculateTextScore(text);
         writeText(args[1]~".ctx",text);
 
         debugSpace(text);
