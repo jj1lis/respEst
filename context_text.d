@@ -119,6 +119,7 @@ class Word:Meta{
 class Phrase:Meta{
     private Word[] words;
     private int dependency;
+    private uint weight;
     
     this(string[] lines,int num,int stc_num,int text_num,int depend_to){
         super(Type.t_phrase,num,stc_num,text_num);
@@ -127,6 +128,7 @@ class Phrase:Meta{
         for(int cnt=0;cnt<lines.length;cnt++){
             words[cnt]=new Word(lines[cnt],cnt,getNumber,getParentNumber,getGranpaNumber);
         }
+        weight=0;
     }
 
     Word[] getWords(){
@@ -136,13 +138,21 @@ class Phrase:Meta{
     int getDependency(){
         return dependency;
     }
+
+    void setWeight(uint w){
+        weight=w;
+    }
+
+    uint getWeight(){
+        return weight;
+    }
 }
 
 class Sentence:Meta{    //TODO!!
     private Phrase[] phrases;
-    private int score_stc;
+    private float score_stc;
 
-    this(string[] lines, int score,int number,int text_num){
+    this(string[] lines, float score,int number,int text_num){
         super(Type.t_stc,number,text_num);
         score_stc=score;
         phrases=new Phrase[0];
@@ -200,11 +210,11 @@ class Text:Meta{
             }else{
                 int score_stc;
                 try{
-                    score_stc=to!int(lines[cnt].split(",")[1]);
+                    score_stc=to!float(lines[cnt].split(",")[1]);
                 }catch{
                     throw new stringToIntException(lines[cnt].split(",")[1],cnt_stc,getNumber);
                 }
-                if(score_stc<-100||score_stc>100){
+                if(score_stc<-1.||score_stc>1.){
                     throw new scoreException(cnt_stc,number);
                 }
                 sentences~=new Sentence(tmp_stc,score_stc,cnt_stc,number);

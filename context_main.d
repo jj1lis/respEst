@@ -60,11 +60,6 @@ void writeText(string writefile,Text target){
             ","~to!string(target.getScore)~"\n");
 }
 
-int calculateTextScore(Text target){
-    //TODO
-    return 0;//DENUG
-}
-
 void debugSpace(Text target){
     string[] text=new string[0];
     foreach(Sentence s;target.getSentences){
