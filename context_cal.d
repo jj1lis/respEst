@@ -10,6 +10,7 @@ void weightPhrase(Text target){
             }
         }
     }
+    
     //TODO
 }
 

@@ -152,7 +152,7 @@ class Phrase:Meta{
     }
 }
 
-class Sentence:Meta{    //TODO!!
+class Sentence:Meta{
     private Phrase[] phrases;
     private float score_stc;
 
@@ -181,8 +181,9 @@ class Sentence:Meta{    //TODO!!
                             getNumber,getParentNumber,-1);
                 }else{
                     int diff=phrase_num-cnt_phrase;
+                    int dep_var=dependency==-1?0:diff;
                     phrases~=new Phrase(tmp_phrase,phrase_num-diff,
-                            getNumber,getParentNumber,dependency-diff);
+                            getNumber,getParentNumber,dependency-dep_var);
                 }
                 tmp_phrase.length=0;
                 cnt_phrase++;

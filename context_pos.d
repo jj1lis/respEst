@@ -1,3 +1,5 @@
+import std.conv;
+
 enum Pos{
     other,
     filler,
