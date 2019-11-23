@@ -17,18 +17,18 @@ class stringToIntException:Exception{
         super(msg);
     }
 
-    this(string str,int stc,int text){
-        string msg="\""~str~"\" cannot be converted from \'string\' to \'int\' in sentence "~to!string(stc)~",text "~to!string(text)~".";
+    this(string str,int sentence,int text){
+        string msg="\""~str~"\" cannot be converted from \'string\' to \'int\' in sentence "~to!string(sentence)~",text "~to!string(text)~".";
         super(msg);
     }
 
-    this(string str,int phrase,int stc,int text){
-        string msg="\""~str~"\" cannot be converted from \'string\' to \'int\' in phrase "~to!string(phrase)~",sentence "~to!string(stc)~",text "~to!string(text)~".";
+    this(string str,int phrase,int sentence,int text){
+        string msg="\""~str~"\" cannot be converted from \'string\' to \'int\' in phrase "~to!string(phrase)~",sentence "~to!string(sentence)~",text "~to!string(text)~".";
         super(msg);
     }
 
-    this(string str,int word,int phrase,int stc,int text){
-        string msg="\""~str~"\" cannot be converted from \'string\' to \'int\' in word "~to!string(word)~",phrase "~to!string(phrase)~",sentence "~to!string(stc)~",text "~to!string(text)~".";
+    this(string str,int word,int phrase,int sentence,int text){
+        string msg="\""~str~"\" cannot be converted from \'string\' to \'int\' in word "~to!string(word)~",phrase "~to!string(phrase)~",sentence "~to!string(sentence)~",text "~to!string(text)~".";
         super(msg);
     }
 }
@@ -43,53 +43,55 @@ class stringToFloatException:Exception{
         super(msg);
     }
 
-    this(string str,int stc,int text){
-        string msg="\""~str~"\" cannot be converted from \'string\' to \'float\' in sentence "~to!string(stc)~",text "~to!string(text)~".";
+    this(string str,int sentence,int text){
+        string msg="\""~str~"\" cannot be converted from \'string\' to \'float\' in sentence "~to!string(sentence)~",text "~to!string(text)~".";
         super(msg);
     }
 
-    this(string str,int phrase,int stc,int text){
-        string msg="\""~str~"\" cannot be converted from \'string\' to \'float\' in phrase "~to!string(phrase)~",sentence "~to!string(stc)~",text "~to!string(text)~".";
+    this(string str,int phrase,int sentence,int text){
+        string msg="\""~str~"\" cannot be converted from \'string\' to \'float\' in phrase "~to!string(phrase)~",sentence "~to!string(sentence)~",text "~to!string(text)~".";
         super(msg);
     }
 
-    this(string str,int word,int phrase,int stc,int text){
-        string msg="\""~str~"\" cannot be converted from \'string\' to \'float\' in word "~to!string(word)~",phrase "~to!string(phrase)~",sentence "~to!string(stc)~",text "~to!string(text)~".";
+    this(string str,int word,int phrase,int sentence,int text){
+        string msg="\""~str~"\" cannot be converted from \'string\' to \'float\' in word "~to!string(word)~",phrase "~to!string(phrase)~",sentence "~to!string(sentence)~",text "~to!string(text)~".";
         super(msg);
     }
 }
 
 class scoreException:Exception{
+    /*
     this(int min,int max,int text){
         string cursor="text "~to!string(text);
         super(cursor~": score must be in range "~to!string(min)~" ~ "~to!string(max)~".");
     }
-    this(int min,int max,int stc,int text){
-        string cursor="sentence "~to!string(stc)~",text "~to!string(text);
+    this(int min,int max,int sentence,int text){
+        string cursor="sentence "~to!string(sentence)~",text "~to!string(text);
         super(cursor~": score must be in range "~to!string(min)~" ~ "~to!string(max)~".");
     }
-    this(int min,int max,int phrase,int stc,int text){
-        string cursor="phrase "~to!string(phrase)~",sentence "~to!string(stc)~",text "~to!string(text);
+    this(int min,int max,int phrase,int sentence,int text){
+        string cursor="phrase "~to!string(phrase)~",sentence "~to!string(sentence)~",text "~to!string(text);
         super(cursor~": score must be in range "~to!string(min)~" ~ "~to!string(max)~".");
     }
-    this(int min,int max,int word,int phrase,int stc,int text){
-        string cursor="word "~to!string(word)~",phrase "~to!string(phrase)~",sentence "~to!string(stc)~",text "~to!string(text);
+    this(int min,int max,int word,int phrase,int sentence,int text){
+        string cursor="word "~to!string(word)~",phrase "~to!string(phrase)~",sentence "~to!string(sentence)~",text "~to!string(text);
         super(cursor~": score must be in range "~to!string(min)~" ~ "~to!string(max)~".");
     }
+    */
     this(float min,float max,int text){
         string cursor="text "~to!string(text);
         super(cursor~": score must be in range "~to!string(min)~" ~ "~to!string(max)~".");
     }
-    this(float min,float max,int stc,int text){
-        string cursor="sentence "~to!string(stc)~",text "~to!string(text);
+    this(float min,float max,int sentence,int text){
+        string cursor="sentence "~to!string(sentence)~",text "~to!string(text);
         super(cursor~": score must be in range "~to!string(min)~" ~ "~to!string(max)~".");
     }
-    this(float min,float max,int phrase,int stc,int text){
-        string cursor="phrase "~to!string(phrase)~",sentence "~to!string(stc)~",text "~to!string(text);
+    this(float min,float max,int phrase,int sentence,int text){
+        string cursor="phrase "~to!string(phrase)~",sentence "~to!string(sentence)~",text "~to!string(text);
         super(cursor~": score must be in range "~to!string(min)~" ~ "~to!string(max)~".");
     }
-    this(float min,float max,int word,int phrase,int stc,int text){
-        string cursor="word "~to!string(word)~",phrase "~to!string(phrase)~",sentence "~to!string(stc)~",text "~to!string(text);
+    this(float min,float max,int word,int phrase,int sentence,int text){
+        string cursor="word "~to!string(word)~",phrase "~to!string(phrase)~",sentence "~to!string(sentence)~",text "~to!string(text);
         super(cursor~": score must be in range "~to!string(min)~" ~ "~to!string(max)~".");
     }
 }

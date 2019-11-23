@@ -1,5 +1,5 @@
 import context_text;
-import context_neuron;
+//import context_neuron;
 
 void weightPhrase(Text target){
     Word[] words_inText=new Word[0];
