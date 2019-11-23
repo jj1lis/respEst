@@ -1,5 +1,3 @@
-import std.conv;
-
 enum Pos{
     other,
     filler,
@@ -197,7 +195,7 @@ struct Poses{
     }
 }
 
-@safe string PosToString(Pos p){
+string PosToString(Pos p){
     switch(p){
         case Pos.other:
             return "other";
@@ -313,7 +311,7 @@ string Subpos1ToString(Subpos1 sp1){
     }
 }
 
-@safe string Subpos2ToString(Subpos2 sp2){
+string Subpos2ToString(Subpos2 sp2){
     switch(sp2){
         case Subpos2.common:
             return "common";
@@ -348,7 +346,7 @@ string Subpos1ToString(Subpos1 sp1){
     }
 }
 
-@safe string Subpos3ToString(Subpos3 sp3){
+string Subpos3ToString(Subpos3 sp3){
     switch(sp3){
         case Subpos3.common:
             return "common";
@@ -365,7 +363,7 @@ string Subpos1ToString(Subpos1 sp1){
     }
 }
 
-@trusted Poses idToPoses(int id){
+Poses idToPoses(int id){
     switch(id){
         case Pos_id.other:
             return Poses(Pos.other);

@@ -59,7 +59,7 @@ void writeText(string writefile,Text target){
             ","~to!string(target.getScore)~"\n");
 }
 
-void debugSpace(Text target){
+void debugSpace(Text target)pure{
     string[] text=new string[0];
     foreach(Sentence s;target.getSentences){
         foreach(Phrase p;s.getPhrases){
@@ -76,9 +76,9 @@ void debugSpace(Text target){
 
 void main(string[] args){
     if(args.length<2){
-        stderr.writeln("erorr: "~new argumentNumberException("argument is too little").msg);
+        stderr.writeln("erorr: "~new ArgumentNumberException("argument is too little").msg);
     }else if(args.length>2){
-        stderr.writeln("error: "~new argumentNumberException("arguments are too many").msg);
+        stderr.writeln("error: "~new ArgumentNumberException("arguments are too many").msg);
     }else{
         //writeln("debug:ok");
         int read_text_num=0;
@@ -93,7 +93,7 @@ void main(string[] args){
             stderr.writeln("error: "~ntne.msg);
         }catch(stringToFloatException stfe){
             stderr.writeln("error: "~stfe.msg);
-        }catch(scoreException se){
+        }catch(ScoreException se){
             stderr.writeln("error: "~se.msg);
         }
 

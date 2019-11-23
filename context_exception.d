@@ -59,7 +59,7 @@ class stringToFloatException:Exception{
     }
 }
 
-class scoreException:Exception{
+class ScoreException:Exception{
     /*
     this(int min,int max,int text){
         string cursor="text "~to!string(text);
@@ -96,7 +96,7 @@ class scoreException:Exception{
     }
 }
 
-class argumentNumberException:Exception{
+class ArgumentNumberException:Exception{
     this(string reason){
         super("Invalid argument: "~reason~".");
     }
@@ -107,5 +107,29 @@ class NeuronInitializeException:Exception{
         super("Number of inputs,"~input_len.to!string~
                 " is different from number of weights,"~weight_len.to!string~
                 " in Neuron "~number.to!string~", Layer "~layer);
+    }
+}
+
+class ElementEmptyException:Exception{
+    private string msg="Element is Empty: ";
+    this(int text){
+        string cursor="text "~to!string(text);
+        super(msg~cursor);
+    }
+    this(int sentence,int text){
+        string cursor="sentence "~to!string(sentence)~
+            ", in text "~to!string(text);
+        super(msg~cursor);
+    }
+    this(int phrase,int sentence,int text){
+        string cursor="phrase "~to!string(phrase)~
+            ", sentence "~to!string(sentence)~", in text "~to!string(text);
+        super(msg~cursor);
+    }
+    this(int word,int phrase,int sentence,int text){
+        string cursor="word "~to!string(word)~
+            ", phrase "~to!string(phrase)~", sentence "~to!string(sentence)~
+            ", in text "~to!string(text);
+        super(msg~cursor);
     }
 }

@@ -1,3 +1,4 @@
+import std.array;
 import context_text;
 //import context_neuron;
 
@@ -10,7 +11,8 @@ void weightPhrase(Text target){
             }
         }
     }
-    
+    int[] tmp_word_counter=new int[words_inText.length];
+    words_inText.sort;
     //TODO
 }
 
