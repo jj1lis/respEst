@@ -1,4 +1,3 @@
-import std.array;
 import context_text;
 //import context_neuron;
 
@@ -11,9 +10,14 @@ void weightPhrase(Text target){
             }
         }
     }
-    int[] tmp_word_counter=new int[words_inText.length];
-    words_inText.sort;
-    //TODO
+    int[string] tmp_word_counter;
+    foreach(w;words_inText){
+        if(w.getBase in tmp_word_counter){
+            tmp_word_counter[w.getBase]++;
+        }else{
+            tmp_word_counter[w.getBase]=0;
+        }
+    }
 }
 
 void calculateTextScore(Text target){
