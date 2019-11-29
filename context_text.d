@@ -122,6 +122,7 @@ class Word:Meta{
 class Phrase:Meta{
     private Word[] words;
     private int dependency;
+    private int[] be_depended=new int[0];
     private uint weight=0;
 
     this(string[] line_phrase,int number,int stc_number,int text_number,int depend_to){
@@ -146,6 +147,14 @@ class Phrase:Meta{
 
     int getDependency(){
         return dependency;
+    }
+
+    void enqueueBe_depended(int d){
+        be_depended~=d;
+    }
+
+    int[] getBe_depended(){
+        return be_depended;
     }
 
     void setWeight(uint w){
@@ -188,14 +197,26 @@ class Sentence:Meta{
                     phrases~=new Phrase(tmp_phrase,cnt_phrase,
                             getNumber,getParentNumber,-1);
                 }else{
-                    int diff=phrase_number-cnt_phrase;
-                    int depend_var=dependency==-1?0:diff;
-                    phrases~=new Phrase(tmp_phrase,phrase_number-diff,
-                            getNumber,getParentNumber,dependency-depend_var);
+                    //int diff=phrase_number-cnt_phrase;
+                    //int depend_var=dependency==-1?0:diff;
+                    //phrases~=new Phrase(tmp_phrase,phrase_number-diff,
+                            //getNumber,getParentNumber,dependency-depend_var);
+                    phrases~=new Phrase(tmp_phrase,phrase_number,
+                        getNumber,getParentNumber,dependency);
                 }
                 tmp_phrase.length=0;
                 cnt_phrase++;
             }
+        }
+
+        int[] be_dep=new int[phrases.length];
+        foreach(p;phrases){
+            if(p.getDependency>=0){
+                be_dep[p.getDependency]++;
+            }
+        }
+        foreach(i;0..phrases.length-1){
+            phrases[i].enqueueBe_depended(be_dep[i]);
         }
     }
 

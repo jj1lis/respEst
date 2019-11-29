@@ -59,7 +59,7 @@ void writeText(string writefile,Text target){
             ","~to!string(target.getScore)~"\n");
 }
 
-void debugSpace(Text target)pure{
+void debugSpace(Text target){
     string[] text=new string[0];
     foreach(Sentence s;target.getSentences){
         foreach(Phrase p;s.getPhrases){
@@ -97,7 +97,7 @@ void main(string[] args){
             stderr.writeln("error: "~se.msg);
         }
 
-        calculateTextScore(text);
+        text.setScore(calculateTextScore(text));
         writeText(args[1]~".ctx",text);
 
         debugSpace(text);
