@@ -132,7 +132,8 @@ class Phrase:Meta{
         }
         dependency=depend_to;
         words=new Word[line_phrase.length];
-        for(int cnt=0;cnt<line_phrase.length;cnt++){
+        foreach(cnt;0..line_phrase.length.to!int){
+        //for(int cnt=0;cnt<line_phrase.length;cnt++){
             try{
                 words[cnt]=new Word(line_phrase[cnt],cnt,getNumber,getParentNumber,getGranpaNumber);
             }catch(stringToIntException stie){
@@ -177,9 +178,10 @@ class Sentence:Meta{
         }
         score_sentence=score;
         phrases=new Phrase[0];
-        string[] tmp_phrase=new string[0];
+        string[] tmp_phrase;
         int cnt_phrase=0;
-        for(int cnt=0;cnt<line_sentence.length;cnt++){
+        foreach(cnt;0..line_sentence.length){
+        //for(int cnt=0;cnt<line_sentence.length;cnt++){
             if(line_sentence[cnt].split(",")[0]!="$"){
                 tmp_phrase~=line_sentence[cnt];
             }else{
@@ -210,9 +212,9 @@ class Sentence:Meta{
         }
 
         int[] be_dep=new int[phrases.length];
-        foreach(p;phrases){
-            if(p.getDependency>=0){
-                be_dep[p.getDependency]++;
+        foreach(cnt;0..phrases.length-1){
+            if(phrases[cnt].getDependency>=0){
+                be_dep[cnt]++;
             }
         }
         foreach(i;0..phrases.length-1){
@@ -240,8 +242,9 @@ class Text:Meta{
         }
         sentences=new Sentence[0];
         string[] tmp_sentence=new string[0];
-        int cnt,cnt_sentence;
-        for(cnt=cnt_sentence=0;cnt<line_text.length;cnt++){
+        int cnt_sentence=0;
+        foreach(cnt;0..line_text.length){
+        //for(int cnt=0;cnt<line_text.length;cnt++){
             if(line_text[cnt].split(",")[0]!="%"){
                 tmp_sentence~=line_text[cnt];
             }else{
