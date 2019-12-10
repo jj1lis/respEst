@@ -35,36 +35,51 @@ string[] separateText(string[] file_lines,int text_number){//todo!:this dumps my
 }
 
 void writeText(string writefile,Text target){
-    if(exists(writefile)&&isFile(writefile)){
-        remove(writefile);
+    try{
+        if(exists(writefile)&&isFile(writefile)){
+            remove(writefile);
+        }
+    }catch(FileException fe){
+        stderr.writeln("error: "~fe.msg);
     }
 
-    for(int cnt_sentence=0;cnt_sentence<target.getSentences.length;cnt_sentence++){
-        Sentence target_sentence=target.getSentences[cnt_sentence];
-        for(int cnt_phrase=0;cnt_phrase<target_sentence.getPhrases.length;cnt_phrase++){
-            Phrase target_phrase=target_sentence.getPhrases[cnt_phrase]; 
-            for(int cnt_word=0;cnt_word<target_phrase.getWords.length;cnt_word++){
-                Word target_word=target_phrase.getWords[cnt_word];
-                append(writefile,target_word.getMorpheme()~","~target_word.getPoses.pos.PosToString~
-                        ","~target_word.getPoses.subpos1.Subpos1ToString~","~target_word.getPoses.subpos2.Subpos2ToString~
-                        ","~target_word.getPoses.subpos3.Subpos3ToString~","~target_word.getBase()~"\n");
+    for(int cnt_sentence=0;cnt_sentence<target.sentences.length;cnt_sentence++){
+        Sentence target_sentence=target.sentences[cnt_sentence];
+        for(int cnt_phrase=0;cnt_phrase<target_sentence.phrases.length;cnt_phrase++){
+            Phrase target_phrase=target_sentence.phrases[cnt_phrase]; 
+            for(int cnt_word=0;cnt_word<target_phrase.words.length;cnt_word++){
+                Word target_word=target_phrase.words[cnt_word];
+                append(writefile,target_word.morpheme()~","~target_word.poses.pos.to!string~
+                        ","~target_word.poses.subpos1.to!string~","~target_word.poses.subpos2.to!string~
+                        ","~target_word.poses.subpos3.to!string~","~target_word.base~"\n");
             }
-            append(writefile,"$,"~to!string(target_phrase.getNumber)~
-                    ","~to!string(target_phrase.getDependency)~"\n");
+            append(writefile,"$,"~to!string(target_phrase.number)~
+                    ","~to!string(target_phrase.dependency)~"\n");
         }
-        append(writefile,"%,"~to!string(target_sentence.getNumber)~
-                ","~to!string(target_sentence.getScore)~"\n");
+        append(writefile,"%,"~to!string(target_sentence.number)~
+                ","~to!string(target_sentence.score)~"\n");
     }
-    append(writefile,"#,"~to!string(target.getNumber)~
-            ","~to!string(target.getScore)~"\n");
+    append(writefile,"#,"~to!string(target.number)~
+            ","~to!string(target.score)~"\n");
+}
+
+void writeAnalysis(string alsfile,Text target){
+    try{
+        if(exists(alsfile)&&isFile(alsfile)){
+            remove(alsfile);
+        }
+    }catch(FileException fe){
+        stderr.writeln("error: "~fe.msg);
+    }
+
 }
 
 void debugSpace(Text target){
     string[] text=new string[0];
-    foreach(Sentence s;target.getSentences){
-        foreach(Phrase p;s.getPhrases){
-            foreach(Word w;p.getWords){
-                text~=w.getMorpheme;
+    foreach(Sentence s;target.sentences){
+        foreach(Phrase p;s.phrases){
+            foreach(Word w;p.words){
+                text~=w.morpheme;
             }
         }
     }
@@ -99,6 +114,7 @@ void main(string[] args){
 
         text.setScore(calculateTextScore(text));
         writeText(args[1]~".ctx",text);
+        writeAnalysis(args[1]~".als",text);
 
         debugSpace(text);
     }

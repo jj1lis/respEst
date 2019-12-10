@@ -15,173 +15,149 @@ string TypeToString(Type type){
     switch(type){
         case Type.t_word:
             return "Word";
-            //break;
         case Type.t_stc:
             return "Sentence";
-            //break;
         case Type.t_text:
             return "Text";
-            //break;
         default:
             return "Unknown";
     }
 }
 
 class Meta{
-    Type type;
-    private int number;
-    private int parent_number;
-    private int granpa_number;
-    private int dgranpa_number;
+    Type _type;
+    private int _number;
+    private int _parent_number;
+    private int _granpa_number;
+    private int _dgranpa_number;
+
+    @property{
+        Type type(){return _type;}
+        int number(){return _number;}
+        int parent_number(){return _parent_number;}
+        int granpa_number(){return _granpa_number;}
+        int dgranpa_number(){return _dgranpa_number;}
+    }
 
     this(Type target,int number){
-        type=target;
-        this.number=number;
-        this.parent_number=int.max;
-        this.granpa_number=int.max;
-        this.dgranpa_number=int.max;
+        _type=target;
+        this._number=number;
+        this._parent_number=int.max;
+        this._granpa_number=int.max;
+        this._dgranpa_number=int.max;
     }
 
     this(Type target,int number,int parent_number){
-        type=target;
-        this.number=number;
-        this.parent_number=parent_number;
-        this.granpa_number=int.max;
-        this.dgranpa_number=int.max;
+        _type=target;
+        this._number=number;
+        this._parent_number=parent_number;
+        this._granpa_number=int.max;
+        this._dgranpa_number=int.max;
     }
 
     this(Type target,int number,int parent_number,int granpa_number){
-        type=target;
-        this.number=number;
-        this.parent_number=parent_number;
-        this.granpa_number=granpa_number;
-        this.dgranpa_number=int.max;
+        _type=target;
+        this._number=number;
+        this._parent_number=parent_number;
+        this._granpa_number=granpa_number;
+        this._dgranpa_number=int.max;
     }
 
     this(Type target,int number,int parent_number,int granpa_number,int dgranpa_number){
-        type=target;
-        this.number=number;
-        this.parent_number=parent_number;
-        this.granpa_number=granpa_number;
-        this.dgranpa_number=dgranpa_number;
-    }
-
-    Type getType(){
-        return type;
-    }
-    int getNumber(){
-        return number;
-    }
-    int getParentNumber(){
-        return parent_number;
-    }
-    int getGranpaNumber(){
-        return granpa_number;
-    }
-    int getDgranpaNumber(){
-        return dgranpa_number;
+        _type=target;
+        this._number=number;
+        this._parent_number=parent_number;
+        this._granpa_number=granpa_number;
+        this._dgranpa_number=dgranpa_number;
     }
 }
 
 class Word:Meta{
-    private string morpheme;
-    private Poses poses;
-    private int pos_id;
-    private string base;
+    private string _morpheme;
+    private Poses _poses;
+    private int _pos_id;
+    private string _base;
+
+    @property{
+        string morpheme(){return _morpheme;}
+        Poses poses(){return _poses;}
+        int pos_id(){return _pos_id;}
+        string base(){return _base;}
+    }
 
     this(string line_word,int number,int phrase_number,int stc_number,int text_number){
         super(Type.t_word,number,phrase_number,stc_number,text_number);
         if(line_word.length==0){
-            throw new ElementEmptyException(getNumber);
+            throw new ElementEmptyException(this.number);
         }
         auto record=line_word.split(",");
-        morpheme=record[0];
+        _morpheme=record[0];
         try{
-            pos_id=to!int(record[1]);
-            poses=idToPoses(pos_id);
+            _pos_id=to!int(record[1]);
+            _poses=idToPoses(_pos_id);
         }catch{
-            throw new stringToIntException(record[1],getNumber,
-                    getParentNumber,getGranpaNumber,getDgranpaNumber);
+            throw new stringToIntException(record[1],this.number,
+                    parent_number,granpa_number,dgranpa_number);
         }
-        base=record[2];
+        _base=record[2];
     }
-
-    string getMorpheme(){
-        return morpheme;
-    }
-
-    Poses getPoses(){
-        return poses;
-    }
-
-    string getBase(){
-        return base;
-    }
-};
+}
 
 class Phrase:Meta{
-    private Word[] words;
-    private int dependency;
+    private Word[] _words;
+    private int _dependency;
     private int[] be_depended=new int[0];
-    private uint weight=0;
+    private uint _weight;
+
+    @property{
+        Word[] words(){return _words;}
+        int dependency(){return _dependency;}
+        uint weight(){return _weight;}
+        void weight(uint w){_weight=w;}
+    }
 
     this(string[] line_phrase,int number,int stc_number,int text_number,int depend_to){
         super(Type.t_phrase,number,stc_number,text_number);
         if(line_phrase.length==0){
-            throw new ElementEmptyException(getNumber);
+            throw new ElementEmptyException(this.number);
         }
-        dependency=depend_to;
-        words=new Word[line_phrase.length];
+        _dependency=depend_to;
+        _words=new Word[line_phrase.length];
         foreach(cnt;0..line_phrase.length.to!int){
-        //for(int cnt=0;cnt<line_phrase.length;cnt++){
             try{
-                words[cnt]=new Word(line_phrase[cnt],cnt,getNumber,getParentNumber,getGranpaNumber);
+                _words[cnt]=new Word(line_phrase[cnt],cnt,this.number,parent_number,granpa_number);
             }catch(stringToIntException stie){
                 stderr.writeln("error: "~stie.msg);
             }
         }
     }
-
-    Word[] getWords(){
-        return words;
-    }
-
-    int getDependency(){
-        return dependency;
-    }
-
     void enqueueBe_depended(int d){
         be_depended~=d;
     }
-
     int[] getBe_depended(){
         return be_depended;
-    }
-
-    void setWeight(uint w){
-        weight=w;
-    }
-
-    uint getWeight(){
-        return weight;
     }
 }
 
 class Sentence:Meta{
-    private Phrase[] phrases;
+    private Phrase[] _phrases;
     private float score_sentence;
+
+    @property{
+        Phrase[] phrases(){return _phrases;}
+        float score(){return score_sentence;}
+    }
 
     this(string[] line_sentence,float score,int number,int text_number){
         super(Type.t_stc,number,text_number);
         if(line_sentence.length==0){
-            throw new ElementEmptyException(getNumber);
+            throw new ElementEmptyException(this.number);
         }
         score_sentence=score;
-        phrases=new Phrase[0];
+        _phrases=new Phrase[0];
         string[] tmp_phrase;
         int cnt_phrase=0;
         foreach(cnt;0..line_sentence.length){
-        //for(int cnt=0;cnt<line_sentence.length;cnt++){
             if(line_sentence[cnt].split(",")[0]!="$"){
                 tmp_phrase~=line_sentence[cnt];
             }else{
@@ -193,58 +169,54 @@ class Sentence:Meta{
                 }catch{
                     exflag=true;
                     throw new stringToIntException("element in phrase",
-                            cnt_phrase,getNumber,getParentNumber);
+                            cnt_phrase,this.number,parent_number);
                 }
                 if(exflag){
-                    phrases~=new Phrase(tmp_phrase,cnt_phrase,
-                            getNumber,getParentNumber,-1);
+                    _phrases~=new Phrase(tmp_phrase,cnt_phrase,
+                            this.number,parent_number,-1);
                 }else{
-                    //int diff=phrase_number-cnt_phrase;
-                    //int depend_var=dependency==-1?0:diff;
-                    //phrases~=new Phrase(tmp_phrase,phrase_number-diff,
-                            //getNumber,getParentNumber,dependency-depend_var);
-                    phrases~=new Phrase(tmp_phrase,phrase_number,
-                        getNumber,getParentNumber,dependency);
+                    _phrases~=new Phrase(tmp_phrase,phrase_number,
+                            this.number,parent_number,dependency);
                 }
                 tmp_phrase.length=0;
                 cnt_phrase++;
             }
         }
 
-        int[] be_dep=new int[phrases.length];
-        foreach(cnt;0..phrases.length-1){
-            if(phrases[cnt].getDependency>=0){
+        int[] be_dep=new int[_phrases.length];
+        foreach(cnt;0.._phrases.length-1){
+            if(_phrases[cnt].dependency>=0){
                 be_dep[cnt]++;
             }
         }
-        foreach(i;0..phrases.length-1){
-            phrases[i].enqueueBe_depended(be_dep[i]);
+        foreach(i;0.._phrases.length-1){
+            _phrases[i].enqueueBe_depended(be_dep[i]);
         }
     }
-
-    Phrase[] getPhrases(){
-        return phrases;
-    }
-
-    float getScore(){
-        return score_sentence;
-    }
-};
+}
 
 class Text:Meta{
-    private Sentence[] sentences;
+    private Sentence[] _sentences;
     private int score_text=0;
+
+    @property{
+        Sentence[] sentences(){return _sentences;}
+        int score(){return score_text;}
+        void setScore(int score){
+            assert(score<=100&&score>=-100);
+            score_text=score;
+        }
+    }
 
     this(string[] line_text,int number){
         super(Type.t_text,number);
         if(line_text.length==0){
-            throw new ElementEmptyException(getNumber);
+            throw new ElementEmptyException(this.number);
         }
-        sentences=new Sentence[0];
+        _sentences=new Sentence[0];
         string[] tmp_sentence=new string[0];
         int cnt_sentence=0;
         foreach(cnt;0..line_text.length){
-        //for(int cnt=0;cnt<line_text.length;cnt++){
             if(line_text[cnt].split(",")[0]!="%"){
                 tmp_sentence~=line_text[cnt];
             }else{
@@ -252,13 +224,13 @@ class Text:Meta{
                 try{
                     score_sentence=to!float(line_text[cnt].split(",")[1]);
                 }catch{
-                    throw new stringToFloatException(line_text[cnt].split(",")[1],cnt_sentence,getNumber);
+                    throw new stringToFloatException(line_text[cnt].split(",")[1],cnt_sentence,this.number);
                 }
                 if(score_sentence<-1.||score_sentence>1.){
-                    throw new ScoreException(-1.,1.,cnt_sentence,getNumber);
+                    throw new ScoreException(-1.,1.,cnt_sentence,this.number);
                 }
                 try{
-                    sentences~=new Sentence(tmp_sentence,score_sentence,cnt_sentence,getNumber);
+                    _sentences~=new Sentence(tmp_sentence,score_sentence,cnt_sentence,this.number);
                 }catch(stringToIntException stie){
                     stderr.writeln("error: "~stie.msg);
                 }
@@ -267,17 +239,4 @@ class Text:Meta{
             }
         }
     }
-
-    Sentence[] getSentences(){
-        return sentences;
-    }
-
-    int getScore(){
-        return score_text;
-    }
-
-    void setScore(int score){
-        assert(score<=100&&score>=-100);
-        score_text=score;
-    }
-};
+}

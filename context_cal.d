@@ -2,13 +2,13 @@ import context_text;
 import context_pos;
 //import context_neuron;
 
-uint cursorMainWord(Phrase phrase){//TODO
-    auto words=phrase.getWords;
+uint[] cursorMainWord(Phrase phrase){
+    auto words=phrase.words;
     int[] word_weight=new int[words.length];
-    bool[] flag_appendix=new bool[words.length];
-    int[] independ_wordnum=new int[0];
+    //bool[] flag_appendix=new bool[words.length];
+    //int[] independ_wordnum=new int[0];
     foreach(cnt;0..words.length-1){
-        Poses poses=words[cnt].getPoses;
+        Poses poses=words[cnt].poses;
         outer:switch(poses.pos){
             case Pos.verb:
                 switch(poses.subpos1){
@@ -16,6 +16,8 @@ uint cursorMainWord(Phrase phrase){//TODO
                         word_weight[cnt]+=2;
                         break outer;
                     default:
+                        word_weight[cnt]++;
+                        break outer;
                 }
             case Pos.noun:
                 switch(poses.subpos1){
@@ -33,40 +35,59 @@ uint cursorMainWord(Phrase phrase){//TODO
             default:
         }
     }
-    //TODO
-    return 0;//DEBUG
+    uint[] weighests=new uint[0];
+    foreach(cnt;0..word_weight.length){
+        int tmp_weighest;
+        if(tmp_weighest<word_weight[cnt]){
+            tmp_weighest=word_weight[cnt];
+            weighests.length=0;
+            weighests~=cnt;
+        }else if(tmp_weighest==word_weight[cnt]){
+            weighests~=cnt;
+        }
+    }
+
+    return weighests;
+    assert(0);
 }
 
-void weightPhrase(Text target){//TODO
+void weightPhrase(Text target){
     Word[] words_inText=new Word[0];
-    foreach(Sentence s;target.getSentences){
-        foreach(Phrase p;s.getPhrases){
-            foreach(Word w;p.getWords){
+    foreach(Sentence s;target.sentences){
+        foreach(Phrase p;s.phrases){
+            foreach(Word w;p.words){
                 words_inText~=w;
             }
         }
     }
 
-    int[string] tmp_word_counter;
+    uint[string] tmp_word_counter;
     foreach(w;words_inText){
-        if(w.getBase in tmp_word_counter){
-            tmp_word_counter[w.getBase]++;
+        if(w.base in tmp_word_counter){
+            tmp_word_counter[w.base]++;
         }else{
-            tmp_word_counter[w.getBase]=0;
+            tmp_word_counter[w.base]=0;
         }
     }
 
-    foreach(Sentence s;target.getSentences){
-        foreach(Phrase p;s.getPhrases){
-            tmp_word_counter[p.getWords[cursorMainWord(p)].getBase]+=p.getBe_depended.length;
+    foreach(Sentence s;target.sentences){
+        foreach(p;s.phrases){
+            foreach(cursor;p.cursorMainWord){
+                tmp_word_counter[p.words[cursor].base]+=p.getBe_depended.length;
+            }
+        }
+        foreach(p;s.phrases){
+            uint phrase_weight=0;
+            foreach(i;0..p.words.length){
+                phrase_weight+=tmp_word_counter[p.words[i].base];
+            }
+            p.weight(phrase_weight);
         }
     }
-    //TODO
 }
 
 int calculateTextScore(Text target){//TODO
     int score=0;
     weightPhrase(target);
-    //TODO
     return score;
 }
