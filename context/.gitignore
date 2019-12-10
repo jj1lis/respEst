@@ -12,3 +12,5 @@ context-test-*
 *.o
 *.obj
 *.lst
+
+dub_platform*

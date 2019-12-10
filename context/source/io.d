@@ -83,8 +83,8 @@ void writeAnalysis(string alsfile,Text target){
         foreach(cnt_phrase;0..s.phrases.length){
             auto p=s.phrases[cnt_phrase];
             append(alsfile,"\t\t<phrase:"~p.number.to!string~">\n");
-            append(alsfile,"\t\t\tdepend to  :phrase "~p.dependency.to!string~"\n");
-            append(alsfile,"\t\t\tbe depended:from phrase "~p.getBe_depended.to!string~"\n");
+            append(alsfile,"\t\t\tdepend on  :phrase "~p.dependency.to!string~"\n");
+            append(alsfile,"\t\t\tbe depended:by phrase "~p.getBe_depended.to!string~"\n");
             append(alsfile,"\t\t\tweight     :"~p.weight.to!string~"\n");
             foreach(cnt_word;0..p.words.length){
                 auto w=p.words[cnt_word];
