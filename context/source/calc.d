@@ -92,3 +92,16 @@ int calculateTextScore(Text target){//TODO
     weightPhrase(target);
     return score;
 }
+
+class CalcLog{
+    private int _text_number;
+    
+    @property{
+        int text_number(){return _text_number;}
+    }
+
+    this(Text text){
+        _text_number=text.number;
+        //TODO
+    }
+}
