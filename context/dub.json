@@ -1,0 +1,9 @@
+{
+	"name": "context",
+	"authors": [
+		"jj1lis"
+	],
+	"description": "A minimal D application.",
+	"copyright": "Copyright © 2019, jj1lis",
+	"license": "proprietary"
+}

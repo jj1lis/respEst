@@ -1,0 +1,14 @@
+.dub
+docs.json
+__dummy.html
+docs/
+context.so
+context.dylib
+context.dll
+context.a
+context.lib
+context-test-*
+*.exe
+*.o
+*.obj
+*.lst
