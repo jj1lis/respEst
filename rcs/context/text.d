@@ -183,16 +183,6 @@ class Sentence:Meta{
                 cnt_phrase++;
             }
         }
-
-        int[] be_dep=new int[_phrases.length];
-        foreach(cnt;0.._phrases.length-1){
-            if(_phrases[cnt].dependency>=0){
-                be_dep[cnt]++;
-            }
-        }
-        foreach(i;0.._phrases.length-1){
-            _phrases[i].enqueueBe_depended(be_dep[i]);
-        }
     }
 }
 
@@ -238,6 +228,17 @@ class Text:Meta{
                 tmp_sentence.length=0;
                 cnt_sentence++;
             }
+        }
+
+        Phrase[] phrase_inText;
+        foreach(s;_sentences){
+            foreach(p;s.phrases){
+                phrase_inText~=p;
+            }
+        }
+        foreach(p;phrase_inText){
+            
+            //phrase_inText[p.dependency].enqueueBe_depended(p.number);
         }
     }
 }

@@ -75,31 +75,31 @@ void writeAnalysis(string alsfile,Text target){
     }
     
     append(alsfile,"<text:"~target.number.to!string~">\n");
-    append(alsfile,"\tscore:"~target.score.to!string~"\n");
+    append(alsfile,"\tscore:".detab(2)~target.score.to!string~"\n");
     foreach(cnt_sentence;0..target.sentences.length){
         auto s=target.sentences[cnt_sentence];
-        append(alsfile,"\t<sentence:"~s.number.to!string~">\n");
-        append(alsfile,"\t\tscore:"~s.score.to!string~"\n");
+        append(alsfile,"\t<sentence:".detab(2)~s.number.to!string~">\n");
+        append(alsfile,"\t\tscore:".detab(2)~s.score.to!string~"\n");
         foreach(cnt_phrase;0..s.phrases.length){
             auto p=s.phrases[cnt_phrase];
-            append(alsfile,"\t\t<phrase:"~p.number.to!string~">\n");
-            append(alsfile,"\t\t\tdepend on  :phrase "~p.dependency.to!string~"\n");
-            append(alsfile,"\t\t\tbe depended:by phrase "~p.getBe_depended.to!string~"\n");
-            append(alsfile,"\t\t\tweight     :"~p.weight.to!string~"\n");
+            append(alsfile,"\t\t<phrase:".detab(2)~p.number.to!string~">\n");
+            append(alsfile,"\t\t\tdepend on  :phrase ".detab(2)~p.dependency.to!string~"\n");
+            append(alsfile,"\t\t\tbe depended:by phrase ".detab(2)~p.getBe_depended.to!string~"\n");
+            append(alsfile,"\t\t\tweight     :".detab(2)~p.weight.to!string~"\n");
             foreach(cnt_word;0..p.words.length){
                 auto w=p.words[cnt_word];
-                append(alsfile,"\t\t\t<word:"~w.number.to!string~">\n");
-                append(alsfile,"\t\t\t\tmorpheme:"~w.morpheme~"\n");
-                append(alsfile,"\t\t\t\tpos     :"~w.poses.pos.to!string~"\n");
-                append(alsfile,"\t\t\t\tsubpos1 :"~w.poses.subpos1.to!string~"\n");
-                append(alsfile,"\t\t\t\tsubpos2 :"~w.poses.subpos2.to!string~"\n");
-                append(alsfile,"\t\t\t\tsubpos3 :"~w.poses.subpos3.to!string~"\n");
-                append(alsfile,"\t\t\t\tbase    :"~w.base~"\n");
-                append(alsfile,"\t\t\t</word>\n");
+                append(alsfile,"\t\t\t<word:".detab(2)~w.number.to!string~">\n");
+                append(alsfile,"\t\t\t\tmorpheme:".detab(2)~w.morpheme~"\n");
+                append(alsfile,"\t\t\t\tpos     :".detab(2)~w.poses.pos.to!string~"\n");
+                append(alsfile,"\t\t\t\tsubpos1 :".detab(2)~w.poses.subpos1.to!string~"\n");
+                append(alsfile,"\t\t\t\tsubpos2 :".detab(2)~w.poses.subpos2.to!string~"\n");
+                append(alsfile,"\t\t\t\tsubpos3 :".detab(2)~w.poses.subpos3.to!string~"\n");
+                append(alsfile,"\t\t\t\tbase    :".detab(2)~w.base~"\n");
+                append(alsfile,"\t\t\t</word>\n".detab(2));
             }
-            append(alsfile,"\t\t</phrase>\n");
+            append(alsfile,"\t\t</phrase>\n".detab(2));
         }
-        append(alsfile,"\t</sentence>\n");
+        append(alsfile,"\t</sentence>\n".detab(2));
     }
     append(alsfile,"</text>\n");
 }
