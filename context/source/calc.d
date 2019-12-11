@@ -1,13 +1,16 @@
 module context.calc;
 
+import std.conv;
+
 import context.text;
 import context.pos;
+import context.io;
 
 uint[] cursorMainWord(Phrase phrase){
+    writeCalcLog("cursorMainWord:called",phrase);
+    scope(exit) writeCalcLog("cursorMainWord:end",phrase);
     auto words=phrase.words;
-    int[] word_weight=new int[words.length];
-    //bool[] flag_appendix=new bool[words.length];
-    //int[] independ_wordnum=new int[0];
+    uint[] word_weight=new uint[words.length];
     foreach(cnt;0..words.length-1){
         Poses poses=words[cnt].poses;
         outer:switch(poses.pos){
@@ -36,9 +39,13 @@ uint[] cursorMainWord(Phrase phrase){
             default:
         }
     }
-    uint[] weighests=new uint[0];
+    foreach(w;words){
+        writeCalcLog(w.morpheme~" weight:"~word_weight[w.number].to!string);
+    }
+
+    uint[] weighests;
+    int tmp_weighest;
     foreach(cnt;0..cast(uint)word_weight.length){
-        int tmp_weighest;
         if(tmp_weighest<word_weight[cnt]){
             tmp_weighest=word_weight[cnt];
             weighests.length=0;
@@ -47,12 +54,17 @@ uint[] cursorMainWord(Phrase phrase){
             weighests~=cnt;
         }
     }
+    writeCalcLog("weighest words:");
+    foreach(i;weighests){
+        writeCalcLog(words[i].morpheme);
+    }
 
     return weighests;
-    assert(0);
 }
 
 void weightPhrase(Text target){
+    writeCalcLog("weightPhrase:called.",target);
+    scope(exit) writeCalcLog("weightPhrase:end",target);
     Word[] words_inText=new Word[0];
     foreach(Sentence s;target.sentences){
         foreach(Phrase p;s.phrases){
@@ -70,6 +82,10 @@ void weightPhrase(Text target){
             tmp_word_counter[w.base]=0;
         }
     }
+    writeCalcLog("Appearance numbers of words:");
+    foreach(w;words_inText){
+        writeCalcLog(w.base~":"~tmp_word_counter[w.base].to!string);
+    }
 
     foreach(Sentence s;target.sentences){
         foreach(p;s.phrases){
@@ -78,7 +94,7 @@ void weightPhrase(Text target){
             }
         }
         foreach(p;s.phrases){
-            uint phrase_weight=0;
+            uint phrase_weight;
             foreach(i;0..p.words.length){
                 phrase_weight+=tmp_word_counter[p.words[i].base];
             }
@@ -88,20 +104,9 @@ void weightPhrase(Text target){
 }
 
 int calculateTextScore(Text target){//TODO
+    writeCalcLog("calculateTextScore:called.",target);
+    scope(exit) writeCalcLog("calculateTextScore:end.",target);
     int score=0;
     weightPhrase(target);
     return score;
-}
-
-class CalcLog{
-    private int _text_number;
-    
-    @property{
-        int text_number(){return _text_number;}
-    }
-
-    this(Text text){
-        _text_number=text.number;
-        //TODO
-    }
 }

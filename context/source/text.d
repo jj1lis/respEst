@@ -1,9 +1,12 @@
 module context.text;
+
 import std.stdio;
 import std.string;
 import std.conv;
+
 import context.exception;
 import context.pos;
+import context.calc;
 
 enum Type{
     t_word,
@@ -25,7 +28,7 @@ string TypeToString(Type type){
     }
 }
 
-class Meta{
+class Common{
     Type _type;
     private int _number;
     private int _parent_number;
@@ -73,17 +76,17 @@ class Meta{
     }
 }
 
-class Word:Meta{
+class Word:Common{
     private string _morpheme;
     private Poses _poses;
     private int _pos_id;
     private string _base;
 
     @property{
-        string morpheme(){return _morpheme;}
-        Poses poses(){return _poses;}
-        int pos_id(){return _pos_id;}
-        string base(){return _base;}
+        auto morpheme(){return _morpheme;}
+        auto poses(){return _poses;}
+        auto pos_id(){return _pos_id;}
+        auto base(){return _base;}
     }
 
     this(string line_word,int number,int phrase_number,int stc_number,int text_number){
@@ -104,17 +107,17 @@ class Word:Meta{
     }
 }
 
-class Phrase:Meta{
+class Phrase:Common{
     private Word[] _words;
     private int _dependency;
     private int[] be_depended=new int[0];
     private uint _weight;
 
     @property{
-        Word[] words(){return _words;}
-        int dependency(){return _dependency;}
-        uint weight(){return _weight;}
-        void weight(uint w){_weight=w;}
+        auto words(){return _words;}
+        auto dependency(){return _dependency;}
+        auto weight(){return _weight;}
+        auto weight(uint w){_weight=w;}
     }
 
     this(string[] line_phrase,int number,int stc_number,int text_number,int depend_to){
@@ -132,21 +135,23 @@ class Phrase:Meta{
             }
         }
     }
-    void enqueueBe_depended(int d){
+
+    auto enqueueBe_depended(int d){
         be_depended~=d;
     }
-    int[] getBe_depended(){
+
+    auto getBe_depended(){
         return be_depended;
     }
 }
 
-class Sentence:Meta{
+class Sentence:Common{
     private Phrase[] _phrases;
     private float score_sentence;
 
     @property{
-        Phrase[] phrases(){return _phrases;}
-        float score(){return score_sentence;}
+        auto phrases(){return _phrases;}
+        auto score(){return score_sentence;}
     }
 
     this(string[] line_sentence,float score,int number,int text_number){
@@ -157,12 +162,12 @@ class Sentence:Meta{
         score_sentence=score;
         _phrases=new Phrase[0];
         string[] tmp_phrase;
-        int cnt_phrase=0;
+        int cnt_phrase;
         foreach(cnt;0..line_sentence.length){
             if(line_sentence[cnt].split(",")[0]!="$"){
                 tmp_phrase~=line_sentence[cnt];
             }else{
-                bool exflag=false;
+                auto exflag=false;
                 int phrase_number,dependency;
                 try{
                     phrase_number=line_sentence[cnt].split(',')[1].to!(int);
@@ -183,27 +188,17 @@ class Sentence:Meta{
                 cnt_phrase++;
             }
         }
-
-        int[] be_dep=new int[_phrases.length];
-        foreach(cnt;0.._phrases.length-1){
-            if(_phrases[cnt].dependency>=0){
-                be_dep[cnt]++;
-            }
-        }
-        foreach(i;0.._phrases.length-1){
-            _phrases[i].enqueueBe_depended(be_dep[i]);
-        }
     }
 }
 
-class Text:Meta{
+class Text:Common{
     private Sentence[] _sentences;
     private int score_text=0;
 
     @property{
-        Sentence[] sentences(){return _sentences;}
-        int score(){return score_text;}
-        void setScore(int score){
+        auto sentences(){return _sentences;}
+        auto score(){return score_text;}
+        auto setScore(int score){
             assert(score<=100&&score>=-100);
             score_text=score;
         }
@@ -215,8 +210,8 @@ class Text:Meta{
             throw new ElementEmptyException(this.number);
         }
         _sentences=new Sentence[0];
-        string[] tmp_sentence=new string[0];
-        int cnt_sentence=0;
+        string[] tmp_sentence;
+        int cnt_sentence;
         foreach(cnt;0..line_text.length){
             if(line_text[cnt].split(",")[0]!="%"){
                 tmp_sentence~=line_text[cnt];
@@ -237,6 +232,18 @@ class Text:Meta{
                 }
                 tmp_sentence.length=0;
                 cnt_sentence++;
+            }
+        }
+
+        Phrase[] phrase_inText;
+        foreach(s;_sentences){
+            foreach(p;s.phrases){
+                phrase_inText~=p;
+            }
+        }
+        foreach(p;phrase_inText){
+            if(p.dependency>=0){
+                phrase_inText[p.dependency].enqueueBe_depended(p.number);
             }
         }
     }

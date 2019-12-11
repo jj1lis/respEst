@@ -4,13 +4,20 @@ import std.stdio;
 import std.file;
 import std.string;
 import std.conv;
+
+import context.app;
 import context.exception;
 import context.text;
 import context.calc;
 import context.pos;
 
+auto appendln(R)(R name,const void[] buffer){
+    append(name,buffer.to!string~"\n");
+}
 
-string[] devideFileByLine(string filename){
+auto timestamp=()=>meta.startDateTime.to!string;
+
+auto devideFileByLine(string filename){
     try{
         return readText(filename).splitLines;
     }catch(FileException fe){
@@ -18,7 +25,7 @@ string[] devideFileByLine(string filename){
     }
 }
 
-string[] separateText(string[] file_lines,int text_number){//todo!:this dumps myst bugs
+auto separateText(string[] file_lines,int text_number){//todo!:this dumps myst bugs
     string[] tmp_text=new string[0];
     int cnt_text=0;
     for(int cnt=0;cnt<file_lines.length;cnt++){
@@ -36,7 +43,7 @@ string[] separateText(string[] file_lines,int text_number){//todo!:this dumps my
     throw new NoTextNumberException(text_number);
 }
 
-void writeText(string writefile,Text target){
+auto writeText(string writefile,Text target){
     try{
         if(exists(writefile)&&isFile(writefile)){
             remove(writefile);
@@ -46,26 +53,26 @@ void writeText(string writefile,Text target){
     }
 
     foreach(cnt_sentence;0..target.sentences.length){
+        scope(exit) appendln(writefile,"#,"~to!string(target.number)~
+                ","~to!string(target.score)~"");
         auto s=target.sentences[cnt_sentence];
         foreach(cnt_phrase;0..s.phrases.length){
+            scope(exit) appendln(writefile,"%,"~to!string(s.number)~
+                    ","~to!string(s.score)~"");
             auto p=s.phrases[cnt_phrase]; 
             foreach(cnt_word;0..p.words.length){
+                scope(exit) appendln(writefile,"$,"~to!string(p.number)~
+                        ","~to!string(p.dependency)~"");
                 auto w=p.words[cnt_word];
-                append(writefile,w.morpheme()~","~w.poses.pos.to!string~
+                appendln(writefile,w.morpheme()~","~w.poses.pos.to!string~
                         ","~w.poses.subpos1.to!string~","~w.poses.subpos2.to!string~
-                        ","~w.poses.subpos3.to!string~","~w.base~"\n");
+                        ","~w.poses.subpos3.to!string~","~w.base~"");
             }
-            append(writefile,"$,"~to!string(p.number)~
-                    ","~to!string(p.dependency)~"\n");
         }
-        append(writefile,"%,"~to!string(s.number)~
-                ","~to!string(s.score)~"\n");
     }
-    append(writefile,"#,"~to!string(target.number)~
-            ","~to!string(target.score)~"\n");
 }
 
-void writeAnalysis(string alsfile,Text target){
+auto writeAnalysis(string alsfile,Text target){
     try{
         if(exists(alsfile)&&isFile(alsfile)){
             remove(alsfile);
@@ -73,38 +80,68 @@ void writeAnalysis(string alsfile,Text target){
     }catch(FileException fe){
         stderr.writeln("error: "~fe.msg);
     }
-    
-    append(alsfile,"<text:"~target.number.to!string~">\n");
-    append(alsfile,"\tscore:".detab(2)~target.score.to!string~"\n");
-    foreach(cnt_sentence;0..target.sentences.length){
-        auto s=target.sentences[cnt_sentence];
-        append(alsfile,"\t<sentence:".detab(2)~s.number.to!string~">\n");
-        append(alsfile,"\t\tscore:".detab(2)~s.score.to!string~"\n");
-        foreach(cnt_phrase;0..s.phrases.length){
-            auto p=s.phrases[cnt_phrase];
-            append(alsfile,"\t\t<phrase:".detab(2)~p.number.to!string~">\n");
-            append(alsfile,"\t\t\tdepend on  :phrase ".detab(2)~p.dependency.to!string~"\n");
-            append(alsfile,"\t\t\tbe depended:by phrase ".detab(2)~p.getBe_depended.to!string~"\n");
-            append(alsfile,"\t\t\tweight     :".detab(2)~p.weight.to!string~"\n");
-            foreach(cnt_word;0..p.words.length){
-                auto w=p.words[cnt_word];
-                append(alsfile,"\t\t\t<word:".detab(2)~w.number.to!string~">\n");
-                append(alsfile,"\t\t\t\tmorpheme:".detab(2)~w.morpheme~"\n");
-                append(alsfile,"\t\t\t\tpos     :".detab(2)~w.poses.pos.to!string~"\n");
-                append(alsfile,"\t\t\t\tsubpos1 :".detab(2)~w.poses.subpos1.to!string~"\n");
-                append(alsfile,"\t\t\t\tsubpos2 :".detab(2)~w.poses.subpos2.to!string~"\n");
-                append(alsfile,"\t\t\t\tsubpos3 :".detab(2)~w.poses.subpos3.to!string~"\n");
-                append(alsfile,"\t\t\t\tbase    :".detab(2)~w.base~"\n");
-                append(alsfile,"\t\t\t</word>\n".detab(2));
+    {
+        appendln(alsfile,"<text:"~target.number.to!string~">");
+        scope(exit) appendln(alsfile,"</text>");
+        appendln(alsfile,"\tscore:".detab(2)~target.score.to!string~"");
+        foreach(cnt_sentence;0..target.sentences.length){
+            auto s=target.sentences[cnt_sentence];
+            appendln(alsfile,"\t<sentence:".detab(2)~s.number.to!string~">");
+            scope(exit) appendln(alsfile,"\t</sentence>".detab(2));
+            appendln(alsfile,"\t\tscore:".detab(2)~s.score.to!string~"");
+            foreach(cnt_phrase;0..s.phrases.length){
+                auto p=s.phrases[cnt_phrase];
+                appendln(alsfile,"\t\t<phrase:".detab(2)~p.number.to!string~">");
+                scope(exit) appendln(alsfile,"\t\t</phrase>".detab(2));
+                appendln(alsfile,"\t\t\tdepend on  :phrase ".detab(2)~p.dependency.to!string~"");
+                appendln(alsfile,"\t\t\tbe depended:by phrase ".detab(2)~p.getBe_depended.to!string~"");
+                appendln(alsfile,"\t\t\tweight     :".detab(2)~p.weight.to!string~"");
+                foreach(cnt_word;0..p.words.length){
+                    auto w=p.words[cnt_word];
+                    appendln(alsfile,"\t\t\t<word:".detab(2)~w.number.to!string~">");
+                    scope(exit) appendln(alsfile,"\t\t\t</word>".detab(2));
+                    appendln(alsfile,"\t\t\t\tmorpheme:".detab(2)~w.morpheme~"");
+                    appendln(alsfile,"\t\t\t\tpos     :".detab(2)~w.poses.pos.to!string~"");
+                    appendln(alsfile,"\t\t\t\tsubpos1 :".detab(2)~w.poses.subpos1.to!string~"");
+                    appendln(alsfile,"\t\t\t\tsubpos2 :".detab(2)~w.poses.subpos2.to!string~"");
+                    appendln(alsfile,"\t\t\t\tsubpos3 :".detab(2)~w.poses.subpos3.to!string~"");
+                    appendln(alsfile,"\t\t\t\tbase    :".detab(2)~w.base~"");
+                }
             }
-            append(alsfile,"\t\t</phrase>\n".detab(2));
         }
-        append(alsfile,"\t</sentence>\n".detab(2));
     }
-    append(alsfile,"</text>\n");
 }
 
-void debugSpace(Text target){
+auto writeCalcLog(T)(string log,T target){
+    //string file=meta.startDateTime.to!string.replace(" ","-")~".clg";
+    string file=meta.filename~".clg";
+    string type=typeof(target).stringof;
+    try{
+        if(exists(file)&&isFile(file)&&meta.writeCalcLogFirst){
+            remove(file);
+            meta.foldwriteCalcLogFirst;
+        }
+        appendln(file,log~" "~type~" "~target.number.to!string);
+    }catch(FileException fe){
+        stderr.writeln("error: "~fe.msg);
+    }
+}
+
+auto writeCalcLog(string log){
+    //string file=meta.startDateTime.to!string.replace(" ","-")~".clg";
+    string file=meta.filename~".clg";
+    try{
+        if(exists(file)&&isFile(file)&&meta.writeCalcLogFirst){
+            remove(file);
+            meta.foldwriteCalcLogFirst;
+        }
+        appendln(file,log);
+    }catch(FileException fe){
+        stderr.writeln("error: "~fe.msg);
+    }
+}
+
+auto debugSpace(Text target){
     string[] text=new string[0];
     foreach(Sentence s;target.sentences){
         foreach(Phrase p;s.phrases){

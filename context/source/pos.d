@@ -197,7 +197,7 @@ struct Poses{
     }
 }
 
-Poses idToPoses(int id){
+auto idToPoses(int id){
     switch(id){
         case Pos_id.other:
             return Poses(Pos.other);
