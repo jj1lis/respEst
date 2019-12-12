@@ -13,12 +13,14 @@ struct Meta{
     private SysTime start;
     private string readfile;
     private bool first=true;
+    private string dicfile;
 
     @property{
         auto startTime(){return start;}
         auto startDateTime(){return cast(DateTime)start;}
         auto filename(){return readfile;}
         auto writeCalcLogFirst(){return first;}
+        auto dicname(){return dicfile}
     }
     auto foldwriteCalcLogFirst(){first=false;}
     this(SysTime c,string file){

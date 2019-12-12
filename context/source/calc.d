@@ -103,10 +103,37 @@ void weightPhrase(Text target){
     }
 }
 
-int calculateTextScore(Text target){//TODO
+auto calculateTextScore(Text target){//TODO
     writeCalcLog("calculateTextScore:called.",target);
     scope(exit) writeCalcLog("calculateTextScore:end.",target);
-    int score=0;
+    int score;
     weightPhrase(target);
+    foreach(s;target.sentences){
+        real sent_score=0;
+        foreach(p;s.phrases){
+            auto phrase_score=p.weight*p.score;
+            p.isNegative?phrase_score*-1:;
+            sent_score+=phrase_score;
+        }
+        score+=sent_score*s.score;
+    }
     return score;
+}
+
+auto score(Phrase p){
+    import std.algorighm;
+    return getWordScorelist(p.words).sum;
+    //getWordScorelist isn't implemented yet
+}
+
+bool isNegative(Phrase p){
+    foreach(w;p.words){
+        if(isNegativeWord(w)){
+            return true;
+        }
+    }
+    return false;
+}
+
+auto isNegative(Word w){//TODO
 }

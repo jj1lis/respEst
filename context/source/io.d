@@ -141,6 +141,17 @@ auto writeCalcLog(string log){
     }
 }
 
+auto getWordScorelist(Word[] words){
+    string[] dic; 
+    try{
+        dic=readText(meta.dicname).splitLines;
+    }catch(FileException fe){
+        throw new FileException(meta.dicname,"failed to open dictionary");
+    }
+    //TODO
+}
+
+
 auto debugSpace(Text target){
     string[] text=new string[0];
     foreach(Sentence s;target.sentences){
