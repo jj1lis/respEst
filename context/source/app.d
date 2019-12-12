@@ -14,18 +14,23 @@ struct Meta{
     private string readfile;
     private bool first=true;
     private string dicfile;
+    private DicShelf dics;
+
+    private string path="dictionary/";
 
     @property{
         auto startTime(){return start;}
         auto startDateTime(){return cast(DateTime)start;}
         auto filename(){return readfile;}
         auto writeCalcLogFirst(){return first;}
-        auto dicname(){return dicfile}
+        auto dicname(){return dicfile;}
+        auto dictionary(){return dics;}
     }
     auto foldwriteCalcLogFirst(){first=false;}
     this(SysTime c,string file){
         start=c;
         readfile=file;
+        dics=new DicShelf(path~"noun.dic",path~"yougen.dic");
     }
 }
 

@@ -105,6 +105,13 @@ class Word:Common{
         }
         _base=record[2];
     }
+
+    auto suitable(){
+        if(_base=="*"){
+            return morpheme;
+        }
+        return _base;
+    }
 }
 
 class Phrase:Common{
@@ -193,13 +200,13 @@ class Sentence:Common{
 
 class Text:Common{
     private Sentence[] _sentences;
-    private int score_text=0;
+    private real score_text=0;
 
     @property{
         auto sentences(){return _sentences;}
         auto score(){return score_text;}
-        auto setScore(int score){
-            assert(score<=100&&score>=-100);
+        auto setScore(real score){
+            //assert(score<=100&&score>=-100);
             score_text=score;
         }
     }

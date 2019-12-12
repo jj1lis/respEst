@@ -1,0 +1,19 @@
+calculateTextScore:called. Text 0
+weightPhrase:called. Text 0
+Appearance numbers of words:
+メロス:0
+は:0
+激怒:0
+し:0
+た:0
+cursorMainWord:called Phrase 0
+メロス weight:1
+は weight:0
+激怒 weight:1
+し weight:2
+た weight:0
+weighest words:
+し
+cursorMainWord:end Phrase 0
+weightPhrase:end Text 0
+calculateTextScore:end. Text 0

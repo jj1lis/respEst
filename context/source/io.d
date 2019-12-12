@@ -142,13 +142,32 @@ auto writeCalcLog(string log){
 }
 
 auto getWordScorelist(Word[] words){
-    string[] dic; 
-    try{
-        dic=readText(meta.dicname).splitLines;
-    }catch(FileException fe){
-        throw new FileException(meta.dicname,"failed to open dictionary");
+    string[] dic;
+    int[] word_score;
+    outer:foreach(w;words){
+        switch(w.poses.pos){
+            case Pos.noun:
+                dic=meta.dictionary.noun;
+                break;
+            case Pos.adject:
+                dic=meta.dictionary.adject;
+                break;
+            case Pos.verb:
+                dic=meta.dictionary.verb;
+                break;
+            default:
+                word_score~=0;
+                continue outer;
+        }
+        foreach(line;dic){
+            if(line.split(",")[0]/*.split[0]*/==w.suitable){
+                word_score~=line.split(",")[1].chomp.to!int;
+            }else{
+                word_score~=0;
+            }
+        }
     }
-    //TODO
+    return word_score;
 }
 
 
@@ -167,3 +186,22 @@ auto debugSpace(Text target){
     "\n".write;
 }
 
+class DicShelf{
+    private string[] _noun;
+    private string[] _precaution;
+
+    @property{
+        string[] noun(){return _noun;}
+        string[] adject(){return _precaution;}
+        string[] verb(){return _precaution;}
+    }
+
+    this(string noundic,string predic){
+        try{
+        _noun=devideFileByLine(noundic);
+        _precaution=devideFileByLine(predic);
+        }catch(FileException fe){
+            stderr.writeln("error: can't open Dictionary.:"~fe.msg);
+        }
+    }
+}

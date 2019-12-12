@@ -31,7 +31,7 @@ uint[] cursorMainWord(Phrase phrase){
                     default:
                 }
             case Pos.adject:
-            case Pos.conject:
+            case Pos.conjunct:
             case Pos.adverb:
             case Pos.rentai:
                 word_weight[cnt]++;
@@ -76,27 +76,27 @@ void weightPhrase(Text target){
 
     uint[string] tmp_word_counter;
     foreach(w;words_inText){
-        if(w.base in tmp_word_counter){
-            tmp_word_counter[w.base]++;
+        if(w.suitable in tmp_word_counter){
+            tmp_word_counter[w.suitable]++;
         }else{
-            tmp_word_counter[w.base]=0;
+            tmp_word_counter[w.suitable]=0;
         }
     }
     writeCalcLog("Appearance numbers of words:");
     foreach(w;words_inText){
-        writeCalcLog(w.base~":"~tmp_word_counter[w.base].to!string);
+        writeCalcLog(w.morpheme~":"~tmp_word_counter[w.suitable].to!string);
     }
 
     foreach(Sentence s;target.sentences){
         foreach(p;s.phrases){
             foreach(cursor;p.cursorMainWord){
-                tmp_word_counter[p.words[cursor].base]+=p.getBe_depended.length;
+                tmp_word_counter[p.words[cursor].suitable]+=p.getBe_depended.length;
             }
         }
         foreach(p;s.phrases){
             uint phrase_weight;
             foreach(i;0..p.words.length){
-                phrase_weight+=tmp_word_counter[p.words[i].base];
+                phrase_weight+=tmp_word_counter[p.words[i].suitable];
             }
             p.weight(phrase_weight);
         }
@@ -106,29 +106,33 @@ void weightPhrase(Text target){
 auto calculateTextScore(Text target){//TODO
     writeCalcLog("calculateTextScore:called.",target);
     scope(exit) writeCalcLog("calculateTextScore:end.",target);
-    int score;
+    real text_score;
     weightPhrase(target);
     foreach(s;target.sentences){
         real sent_score=0;
         foreach(p;s.phrases){
             auto phrase_score=p.weight*p.score;
-            p.isNegative?phrase_score*-1:;
+            if(p.isNegative){
+                phrase_score*=-1;
+            }
             sent_score+=phrase_score;
         }
-        score+=sent_score*s.score;
+        text_score+=sent_score*s.score;
     }
-    return score;
+    return text_score;
 }
 
 auto score(Phrase p){
-    import std.algorighm;
-    return getWordScorelist(p.words).sum;
-    //getWordScorelist isn't implemented yet
+    int sum;
+    foreach(word_score;p.words.getWordScorelist){
+        sum+=word_score;
+    }
+    return sum;
 }
 
 bool isNegative(Phrase p){
     foreach(w;p.words){
-        if(isNegativeWord(w)){
+        if(isNegative(w)){
             return true;
         }
     }
@@ -136,4 +140,12 @@ bool isNegative(Phrase p){
 }
 
 auto isNegative(Word w){//TODO
+    switch(w.suitable){
+        case "ない":
+        case "ず":
+        case "ぬ":
+            return true;
+        default:
+            return false;
+    }
 }
