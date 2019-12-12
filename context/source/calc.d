@@ -13,31 +13,31 @@ uint[] cursorMainWord(Phrase phrase){
     uint[] word_weight=new uint[words.length];
     foreach(cnt;0..words.length-1){
         Poses poses=words[cnt].poses;
-        outer:switch(poses.pos){
-            case Pos.verb:
-                switch(poses.subpos1){
-                    case Subpos1.independ:
-                        word_weight[cnt]+=2;
-                        break outer;
-                    default:
-                        word_weight[cnt]++;
-                        break outer;
-                }
-            case Pos.noun:
-                switch(poses.subpos1){
-                    case Subpos1.proper:
-                        word_weight[cnt]+=2;
-                        break outer;
-                    default:
-                }
-            case Pos.adject:
-            case Pos.conjunct:
-            case Pos.adverb:
-            case Pos.rentai:
-                word_weight[cnt]++;
-                break;
-            default:
-        }
+outer:switch(poses.pos){
+          case Pos.verb:
+              switch(poses.subpos1){
+                  case Subpos1.independ:
+                      word_weight[cnt]+=2;
+                      break outer;
+                  default:
+                      word_weight[cnt]++;
+                      break outer;
+              }
+          case Pos.noun:
+              switch(poses.subpos1){
+                  case Subpos1.proper:
+                      word_weight[cnt]+=2;
+                      break outer;
+                  default:
+              }
+          case Pos.adject:
+          case Pos.conjunct:
+          case Pos.adverb:
+          case Pos.rentai:
+              word_weight[cnt]++;
+              break;
+          default:
+      }
     }
     foreach(w;words){
         writeCalcLog(w.morpheme~" weight:"~word_weight[w.number].to!string);
@@ -106,33 +106,50 @@ void weightPhrase(Text target){
 auto calculateTextScore(Text target){//TODO
     writeCalcLog("calculateTextScore:called.",target);
     scope(exit) writeCalcLog("calculateTextScore:end.",target);
-    real text_score;
+    real text_score=0;
     weightPhrase(target);
+    writeCalcLog("text score calc start.");
     foreach(s;target.sentences){
+        writeCalcLog("each phrases' weight in",s);
         real sent_score=0;
+        writeCalcLog("sent_score:"~sent_score.to!string);
+        scope(exit) writeCalcLog("sentence end.");
         foreach(p;s.phrases){
+            writeCalcLog("in",p);
+            writeCalcLog("Phrase.weight:"~p.weight.to!string~",Phrase.score"~p.score.to!string);
             auto phrase_score=p.weight*p.score;
+            writeCalcLog("phrase_score=Phrase.weight*Phrase.score:"~phrase_score.to!string);
             if(p.isNegative){
                 phrase_score*=-1;
+                writeCalcLog("Phrase.isNegative==true:phrase_score*=-1");
             }
             sent_score+=phrase_score;
+            writeCalcLog("sent_score:"~sent_score.to!string);
         }
         text_score+=sent_score*s.score;
+        writeCalcLog("text_score=sent_score*Sentence.score:"~text_score.to!string);
     }
     return text_score;
 }
 
 auto score(Phrase p){
+    writeCalcLog("score(Phrase):called.");
+    scope(exit) writeCalcLog("score:end.");
     int sum;
+    writeCalcLog("Phrase.words.getWordScorelist:"~p.words.getWordScorelist.to!string);
     foreach(word_score;p.words.getWordScorelist){
         sum+=word_score;
     }
+    writeCalcLog("sum:"~sum.to!string);
     return sum;
 }
 
 bool isNegative(Phrase p){
+    writeCalcLog("isNegative(Phrase):called.");
+    scope(exit) writeCalcLog("isNegative(Phrase):end.");
     foreach(w;p.words){
         if(isNegative(w)){
+            writeCalcLog(w.suitable~" is negative",w);
             return true;
         }
     }
@@ -140,6 +157,8 @@ bool isNegative(Phrase p){
 }
 
 auto isNegative(Word w){//TODO
+    writeCalcLog("isNegative(Word):called.");
+    scope(exit) writeCalcLog("isNegative(Word):end.");
     switch(w.suitable){
         case "ない":
         case "ず":

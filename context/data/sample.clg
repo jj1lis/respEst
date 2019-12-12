@@ -67,4 +67,147 @@ weighest words:
 思い
 cursorMainWord:end Phrase 6
 weightPhrase:end Text 0
+text score calc start.
+each phrases' weight in Sentence 0
+sent_score:0
+in Phrase 0
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0]
+sum:0
+score:end.
+Phrase.weight:0,Phrase.score0
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0]
+sum:0
+score:end.
+phrase_score=Phrase.weight*Phrase.score:0
+isNegative(Phrase):called.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Phrase):end.
+sent_score:0
+in Phrase 1
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0]
+sum:0
+score:end.
+Phrase.weight:0,Phrase.score0
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0]
+sum:0
+score:end.
+phrase_score=Phrase.weight*Phrase.score:0
+isNegative(Phrase):called.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Phrase):end.
+sent_score:0
+in Phrase 2
+score(Phrase):called.
+Phrase.words.getWordScorelist:[1, -1, 0]
+sum:0
+score:end.
+Phrase.weight:2,Phrase.score0
+score(Phrase):called.
+Phrase.words.getWordScorelist:[1, -1, 0]
+sum:0
+score:end.
+phrase_score=Phrase.weight*Phrase.score:0
+isNegative(Phrase):called.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Phrase):end.
+sent_score:0
+in Phrase 3
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0, 0]
+sum:0
+score:end.
+Phrase.weight:3,Phrase.score0
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0, 0]
+sum:0
+score:end.
+phrase_score=Phrase.weight*Phrase.score:0
+isNegative(Phrase):called.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Phrase):end.
+sent_score:0
+text_score=sent_score*Sentence.score:0
+sentence end.
+each phrases' weight in Sentence 1
+sent_score:0
+in Phrase 4
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0]
+sum:0
+score:end.
+Phrase.weight:0,Phrase.score0
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0]
+sum:0
+score:end.
+phrase_score=Phrase.weight*Phrase.score:0
+isNegative(Phrase):called.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Phrase):end.
+sent_score:0
+in Phrase 5
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0]
+sum:0
+score:end.
+Phrase.weight:0,Phrase.score0
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0]
+sum:0
+score:end.
+phrase_score=Phrase.weight*Phrase.score:0
+isNegative(Phrase):called.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Phrase):end.
+sent_score:0
+in Phrase 6
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0, 0, 0, 0]
+sum:0
+score:end.
+Phrase.weight:4,Phrase.score0
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0, 0, 0, 0]
+sum:0
+score:end.
+phrase_score=Phrase.weight*Phrase.score:0
+isNegative(Phrase):called.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Word):called.
+isNegative(Word):end.
+isNegative(Phrase):end.
+sent_score:0
+text_score=sent_score*Sentence.score:0
+sentence end.
 calculateTextScore:end. Text 0

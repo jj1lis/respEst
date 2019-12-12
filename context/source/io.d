@@ -144,30 +144,30 @@ auto writeCalcLog(string log){
 auto getWordScorelist(Word[] words){
     string[] dic;
     int[] word_score;
-    outer:foreach(w;words){
-        switch(w.poses.pos){
-            case Pos.noun:
-                dic=meta.dictionary.noun;
-                break;
-            case Pos.adject:
-                dic=meta.dictionary.adject;
-                break;
-            case Pos.verb:
-                dic=meta.dictionary.verb;
-                break;
-            default:
-                word_score~=0;
-                continue outer;
-        }
-        foreach(line;dic){
-            if(line.split(",")[0]/*.split[0]*/==w.suitable){
-                word_score~=line.split(",")[1].chomp.to!int;
-            }else{
-                word_score~=0;
-            }
-        }
-    }
-    return word_score;
+outer:foreach(w;words){
+          switch(w.poses.pos){
+              case Pos.noun:
+                  dic=meta.dictionary.noun;
+                  break;
+              case Pos.adject:
+                  dic=meta.dictionary.adject;
+                  break;
+              case Pos.verb:
+                  dic=meta.dictionary.verb;
+                  break;
+              default:
+                  word_score~=0;
+                  continue outer;
+          }
+          foreach(line;dic){
+              if(line.split(",")[0]/*.split[0]*/==w.suitable){
+                  word_score~=line.split(",")[1].chomp.to!int;
+                  continue outer;
+              }
+          }
+          word_score~=0;
+      }
+      return word_score;
 }
 
 
@@ -198,8 +198,8 @@ class DicShelf{
 
     this(string noundic,string predic){
         try{
-        _noun=devideFileByLine(noundic);
-        _precaution=devideFileByLine(predic);
+            _noun=devideFileByLine(noundic);
+            _precaution=devideFileByLine(predic);
         }catch(FileException fe){
             stderr.writeln("error: can't open Dictionary.:"~fe.msg);
         }

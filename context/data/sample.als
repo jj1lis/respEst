@@ -1,5 +1,5 @@
 <text:0>
-  score:nan
+  score:0
   <sentence:0>
     score:-1
     <phrase:0>

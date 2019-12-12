@@ -22,7 +22,7 @@ $,3,6
 。,symbol,period,none,none,。
 $,3,6
 %,0,-1
-#,0,nan
+#,0,0
 あなた,noun,pronoun,common,none,あなた
 $,4,6
 も,particle,depend,none,none,も
@@ -42,4 +42,4 @@ $,6,-1
 。,symbol,period,none,none,。
 $,6,-1
 %,1,0.7
-#,0,nan
+#,0,0
