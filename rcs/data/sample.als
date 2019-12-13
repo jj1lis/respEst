@@ -4,8 +4,8 @@
     score:-1
     <phrase:0>
       depend on  :phrase 3
-      be depended:by phrase [1]
-      weight     :2
+      be depended:by phrase []
+      weight     :0
       <word:0>
         morpheme:私
         pos     :noun
@@ -25,8 +25,8 @@
     </phrase>
     <phrase:1>
       depend on  :phrase 2
-      be depended:by phrase [1]
-      weight     :2
+      be depended:by phrase []
+      weight     :0
       <word:0>
         morpheme:この世
         pos     :noun
@@ -75,8 +75,8 @@
     </phrase>
     <phrase:3>
       depend on  :phrase 6
-      be depended:by phrase []
-      weight     :1
+      be depended:by phrase [0, 2]
+      weight     :3
       <word:0>
         morpheme:人間
         pos     :noun
@@ -107,8 +107,8 @@
     score:0.7
     <phrase:4>
       depend on  :phrase 6
-      be depended:by phrase [1]
-      weight     :2
+      be depended:by phrase []
+      weight     :0
       <word:0>
         morpheme:あなた
         pos     :noun
@@ -128,8 +128,8 @@
     </phrase>
     <phrase:5>
       depend on  :phrase 6
-      be depended:by phrase [1]
-      weight     :1
+      be depended:by phrase []
+      weight     :0
       <word:0>
         morpheme:そう
         pos     :adverb
@@ -141,8 +141,8 @@
     </phrase>
     <phrase:6>
       depend on  :phrase -1
-      be depended:by phrase []
-      weight     :1
+      be depended:by phrase [3, 4, 5]
+      weight     :4
       <word:0>
         morpheme:思い
         pos     :verb

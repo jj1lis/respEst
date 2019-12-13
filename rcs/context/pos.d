@@ -8,7 +8,7 @@ enum Pos{
     adject,
     particle,
     auxiVerb,
-    conject,
+    conjunct,
     prefix,
     verb,
     adverb,
@@ -38,23 +38,21 @@ enum Subpos1{
     adpartParallelFinal,
     parallel,
     toRentei,
-    auxiVerb,
-    conject,
     adjectConnect,
     numberConnect,
     verbConnect,
     nounConnect,
     particleConnect,
     SahenConnect,
-    NaiAdjectConnect,
+    NaiAdjectStem,
     quote,
     adjectVerbStem,
     proper,
     number,
-    conjectic,
+    conjunctic,
     canAdverb,
     pronoun,
-    verbIndepentic,
+    verbNonIndepentic,
     none,
     unknown,
 };
@@ -114,7 +112,7 @@ enum Pos_id{
     particle_parallel=23,
     particle_toRentai=24,
     auxiVerb=25,//Auxiliary Verb
-    conject=26,
+    conjunct=26,
     prefix_adjectConnect=27,
     prefix_numberConnect=28,
     prefix_verbConnect=29,
@@ -125,7 +123,7 @@ enum Pos_id{
     adverb_common=34,
     adverb_particleConnect=35,
     noun_SahenConnect=36,
-    noun_NaiAdjectConnect=37,
+    noun_NaiAdjectStem=37,
     noun_common=38,
     noun_quote=39,
     noun_adjectVerbStem=40,
@@ -137,7 +135,7 @@ enum Pos_id{
     noun_proper_area_common=46,
     noun_proper_area_country=47,
     noun_number=48,
-    noun_conjectic=49,
+    noun_conjunctic=49,
     noun_suffix_SahenConnect=50,
     noun_suffix_common=51,
     noun_suffix_adjectVerbStem=52,
@@ -149,7 +147,7 @@ enum Pos_id{
     noun_suffix_canAdverb=58,
     noun_pronoun_common=59,
     noun_pronoun_contraction=60,
-    noun_verbIndepentic=61,
+    noun_verbNonIndepentic=61,
     noun_special_auxiVerbStem=62,
     noun_independ_common=63,
     noun_independ_adjectVerbStem=64,
@@ -197,7 +195,7 @@ struct Poses{
     }
 }
 
-Poses idToPoses(int id){
+auto idToPoses(int id){
     switch(id){
         case Pos_id.other:
             return Poses(Pos.other);
@@ -251,8 +249,8 @@ Poses idToPoses(int id){
             return Poses(Pos.particle,Subpos1.toRentei);
         case Pos_id.auxiVerb:
             return Poses(Pos.auxiVerb);
-        case Pos_id.conject:
-            return Poses(Pos.conject);
+        case Pos_id.conjunct:
+            return Poses(Pos.conjunct);
         case Pos_id.prefix_adjectConnect:
             return Poses(Pos.prefix,Subpos1.adjectConnect);
         case Pos_id.prefix_numberConnect:
@@ -273,8 +271,8 @@ Poses idToPoses(int id){
             return Poses(Pos.adverb,Subpos1.particleConnect);
         case Pos_id.noun_SahenConnect:
             return Poses(Pos.noun,Subpos1.SahenConnect);
-        case Pos_id.noun_NaiAdjectConnect:
-            return Poses(Pos.noun,Subpos1.NaiAdjectConnect);
+        case Pos_id.noun_NaiAdjectStem:
+            return Poses(Pos.noun,Subpos1.NaiAdjectStem);
         case Pos_id.noun_common:
             return Poses(Pos.noun,Subpos1.common);
         case Pos_id.noun_quote:
@@ -297,8 +295,8 @@ Poses idToPoses(int id){
             return Poses(Pos.noun,Subpos1.proper,Subpos2.area,Subpos3.country);
         case Pos_id.noun_number:
             return Poses(Pos.noun,Subpos1.number);
-        case Pos_id.noun_conjectic:
-            return Poses(Pos.noun,Subpos1.conjectic);
+        case Pos_id.noun_conjunctic:
+            return Poses(Pos.noun,Subpos1.conjunctic);
         case Pos_id.noun_suffix_SahenConnect:
             return Poses(Pos.noun,Subpos1.suffix,Subpos2.SahenConnect);
         case Pos_id.noun_suffix_common:
@@ -321,8 +319,8 @@ Poses idToPoses(int id){
             return Poses(Pos.noun,Subpos1.pronoun,Subpos2.common);
         case Pos_id.noun_pronoun_contraction:
             return Poses(Pos.noun,Subpos1.pronoun,Subpos2.contraction);
-        case Pos_id.noun_verbIndepentic:
-            return Poses(Pos.noun,Subpos1.verbIndepentic);
+        case Pos_id.noun_verbNonIndepentic:
+            return Poses(Pos.noun,Subpos1.verbNonIndepentic);
         case Pos_id.noun_special_auxiVerbStem:
              return Poses(Pos.noun,Subpos1.special,Subpos2.auxiVerbStem);
         case Pos_id.noun_independ_common:
