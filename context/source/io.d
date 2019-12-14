@@ -43,22 +43,42 @@ auto separateText(string[] file_lines,int text_number){//todo!:this dumps myst b
     throw new NoTextNumberException(text_number);
 }
 
-auto writeText(string writefile,Text target){
+auto textNums(string[] filelines){
+    int[] text_nums;
+    foreach(line;filelines){
+        if(line.split(",")[0]=="#"){
+            text_nums~=line.split(",")[1].to!int;
+        }
+    }
+    return text_nums;
+}
+
+//auto textNums=(string[] lines)=>lines.filter!((line)=>line.split(",")=="#").map!((line)=>line.split(",").to!int).array();
+
+auto initFiles(string file){
     try{
-        if(exists(writefile)&&isFile(writefile)){
-            remove(writefile);
+        if(exists(file~".ctx")&&isFile(file~".ctx")){
+            remove(file~".ctx");
+        }
+        if(exists(file~".als")&&isFile(file~".als")){
+            remove(file~".als");
+        }
+        if(exists(file~".clg")&&isFile(file~".clg")){
+            remove(file~".clg");
         }
     }catch(FileException fe){
         stderr.writeln("error: "~fe.msg);
     }
+}
 
+auto writeText(string writefile,Text target){
     foreach(cnt_sentence;0..target.sentences.length){
         scope(exit) appendln(writefile,"#,"~to!string(target.number)~
                 ","~to!string(target.score)~"");
         auto s=target.sentences[cnt_sentence];
         foreach(cnt_phrase;0..s.phrases.length){
             scope(exit) appendln(writefile,"%,"~to!string(s.number)~
-                    ","~to!string(s.score)~"");
+                    ","~to!string(s.scorefront)~"");
             auto p=s.phrases[cnt_phrase]; 
             foreach(cnt_word;0..p.words.length){
                 scope(exit) appendln(writefile,"$,"~to!string(p.number)~
@@ -73,14 +93,6 @@ auto writeText(string writefile,Text target){
 }
 
 auto writeAnalysis(string alsfile,Text target){
-    try{
-        if(exists(alsfile)&&isFile(alsfile)){
-            remove(alsfile);
-        }
-    }catch(FileException fe){
-        stderr.writeln("error: "~fe.msg);
-    }
-    {
         appendln(alsfile,"<text:"~target.number.to!string~">");
         scope(exit) appendln(alsfile,"</text>");
         appendln(alsfile,"\tscore:".detab(2)~target.score.to!string~"");
@@ -88,7 +100,8 @@ auto writeAnalysis(string alsfile,Text target){
             auto s=target.sentences[cnt_sentence];
             appendln(alsfile,"\t<sentence:".detab(2)~s.number.to!string~">");
             scope(exit) appendln(alsfile,"\t</sentence>".detab(2));
-            appendln(alsfile,"\t\tscore:".detab(2)~s.score.to!string~"");
+            appendln(alsfile,"\t\tscore           :".detab(2)~s.score.to!string~"");
+            appendln(alsfile,"\t\tscore frontstage:".detab(2)~s.scorefront.to!string~"");
             foreach(cnt_phrase;0..s.phrases.length){
                 auto p=s.phrases[cnt_phrase];
                 appendln(alsfile,"\t\t<phrase:".detab(2)~p.number.to!string~">");
@@ -109,7 +122,6 @@ auto writeAnalysis(string alsfile,Text target){
                 }
             }
         }
-    }
 }
 
 auto writeCalcLog(T)(string log,T target){
@@ -117,10 +129,6 @@ auto writeCalcLog(T)(string log,T target){
     string file=meta.filename~".clg";
     string type=typeof(target).stringof;
     try{
-        if(exists(file)&&isFile(file)&&meta.writeCalcLogFirst){
-            remove(file);
-            meta.foldwriteCalcLogFirst;
-        }
         appendln(file,log~" "~type~" "~target.number.to!string);
     }catch(FileException fe){
         stderr.writeln("error: "~fe.msg);
@@ -131,10 +139,6 @@ auto writeCalcLog(string log){
     //string file=meta.startDateTime.to!string.replace(" ","-")~".clg";
     string file=meta.filename~".clg";
     try{
-        if(exists(file)&&isFile(file)&&meta.writeCalcLogFirst){
-            remove(file);
-            meta.foldwriteCalcLogFirst;
-        }
         appendln(file,log);
     }catch(FileException fe){
         stderr.writeln("error: "~fe.msg);

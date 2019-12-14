@@ -8,67 +8,41 @@ import context.exception;
 import context.pos;
 import context.calc;
 
-enum Type{
-    t_word,
-    t_phrase,
-    t_stc,
-    t_text,
-};
-
-string TypeToString(Type type){
-    switch(type){
-        case Type.t_word:
-            return "Word";
-        case Type.t_stc:
-            return "Sentence";
-        case Type.t_text:
-            return "Text";
-        default:
-            return "Unknown";
-    }
-}
-
 class Common{
-    Type _type;
     private int _number;
     private int _parent_number;
     private int _granpa_number;
     private int _dgranpa_number;
 
     @property{
-        Type type(){return _type;}
         int number(){return _number;}
         int parent_number(){return _parent_number;}
         int granpa_number(){return _granpa_number;}
         int dgranpa_number(){return _dgranpa_number;}
     }
 
-    this(Type target,int number){
-        _type=target;
+    this(int number){
         this._number=number;
         this._parent_number=int.max;
         this._granpa_number=int.max;
         this._dgranpa_number=int.max;
     }
 
-    this(Type target,int number,int parent_number){
-        _type=target;
+    this(int number,int parent_number){
         this._number=number;
         this._parent_number=parent_number;
         this._granpa_number=int.max;
         this._dgranpa_number=int.max;
     }
 
-    this(Type target,int number,int parent_number,int granpa_number){
-        _type=target;
+    this(int number,int parent_number,int granpa_number){
         this._number=number;
         this._parent_number=parent_number;
         this._granpa_number=granpa_number;
         this._dgranpa_number=int.max;
     }
 
-    this(Type target,int number,int parent_number,int granpa_number,int dgranpa_number){
-        _type=target;
+    this(int number,int parent_number,int granpa_number,int dgranpa_number){
         this._number=number;
         this._parent_number=parent_number;
         this._granpa_number=granpa_number;
@@ -90,7 +64,7 @@ class Word:Common{
     }
 
     this(string line_word,int number,int phrase_number,int stc_number,int text_number){
-        super(Type.t_word,number,phrase_number,stc_number,text_number);
+        super(number,phrase_number,stc_number,text_number);
         if(line_word.length==0){
             throw new ElementEmptyException(this.number);
         }
@@ -128,7 +102,7 @@ class Phrase:Common{
     }
 
     this(string[] line_phrase,int number,int stc_number,int text_number,int depend_to){
-        super(Type.t_phrase,number,stc_number,text_number);
+        super(number,stc_number,text_number);
         if(line_phrase.length==0){
             throw new ElementEmptyException(this.number);
         }
@@ -154,19 +128,22 @@ class Phrase:Common{
 
 class Sentence:Common{
     private Phrase[] _phrases;
-    private float score_sentence;
+    private float score_frontstage;
+    private real score_sentence;
 
     @property{
         auto phrases(){return _phrases;}
         auto score(){return score_sentence;}
+        auto score(real scr){score_sentence=scr;}
+        auto scorefront(){return score_frontstage;}
     }
 
     this(string[] line_sentence,float score,int number,int text_number){
-        super(Type.t_stc,number,text_number);
+        super(number,text_number);
         if(line_sentence.length==0){
             throw new ElementEmptyException(this.number);
         }
-        score_sentence=score;
+        score_frontstage=score;
         _phrases=new Phrase[0];
         string[] tmp_phrase;
         int cnt_phrase;
@@ -195,6 +172,14 @@ class Sentence:Common{
                 cnt_phrase++;
             }
         }
+
+        foreach(p;_phrases){
+            if(p.dependency>=0){
+                _phrases[p.dependency].enqueueBe_depended(p.number);
+            }else{
+                assert(p.dependency==-1);
+            }
+        }
     }
 }
 
@@ -212,7 +197,7 @@ class Text:Common{
     }
 
     this(string[] line_text,int number){
-        super(Type.t_text,number);
+        super(number);
         if(line_text.length==0){
             throw new ElementEmptyException(this.number);
         }
@@ -239,18 +224,6 @@ class Text:Common{
                 }
                 tmp_sentence.length=0;
                 cnt_sentence++;
-            }
-        }
-
-        Phrase[] phrase_inText;
-        foreach(s;_sentences){
-            foreach(p;s.phrases){
-                phrase_inText~=p;
-            }
-        }
-        foreach(p;phrase_inText){
-            if(p.dependency>=0){
-                phrase_inText[p.dependency].enqueueBe_depended(p.number);
             }
         }
     }

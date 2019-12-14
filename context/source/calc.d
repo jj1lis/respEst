@@ -7,7 +7,7 @@ import context.pos;
 import context.io;
 
 uint[] cursorMainWord(Phrase phrase){
-    writeCalcLog("cursorMainWord:called",phrase);
+    writeCalcLog("\ncursorMainWord:called",phrase);
     scope(exit) writeCalcLog("cursorMainWord:end",phrase);
     auto words=phrase.words;
     uint[] word_weight=new uint[words.length];
@@ -63,7 +63,7 @@ outer:switch(poses.pos){
 }
 
 void weightPhrase(Text target){
-    writeCalcLog("weightPhrase:called.",target);
+    writeCalcLog("\nweightPhrase:called.",target);
     scope(exit) writeCalcLog("weightPhrase:end",target);
     Word[] words_inText=new Word[0];
     foreach(Sentence s;target.sentences){
@@ -104,40 +104,54 @@ void weightPhrase(Text target){
 }
 
 auto calculateTextScore(Text target){//TODO
-    writeCalcLog("calculateTextScore:called.",target);
+    writeCalcLog("\ncalculateTextScore:called.",target);
     scope(exit) writeCalcLog("calculateTextScore:end.",target);
-    real text_score=0;
+    real text_score_sum=0;
     weightPhrase(target);
     writeCalcLog("text score calc start.");
     foreach(s;target.sentences){
         writeCalcLog("each phrases' weight in",s);
-        real sent_score=0;
-        writeCalcLog("sent_score:"~sent_score.to!string);
-        scope(exit) writeCalcLog("sentence end.");
+        real sent_score_sum=0;
+        scope(exit) writeCalcLog("sentence end.\n");
+        int[] weights_inSentence;
+        foreach(p;s.phrases){
+            weights_inSentence~=p.weight;
+        }
         foreach(p;s.phrases){
             writeCalcLog("in",p);
-            writeCalcLog("Phrase.weight:"~p.weight.to!string~",Phrase.score"~p.score.to!string);
-            auto phrase_score=p.weight*p.score;
-            writeCalcLog("phrase_score=Phrase.weight*Phrase.score:"~phrase_score.to!string);
+            auto raw_score=p.score;
+            writeCalcLog("Phrase.weight:"~p.weight.to!string~",Phrase.score:"~raw_score.to!string);
+            //auto phrase_score=p.weight*raw_score;
+            //writeCalcLog("phrase_score=Phrase.weight*Phrase.score:"~phrase_score.to!string);
+            //auto phrase_score=raw_score;
+            auto phrase_score=raw_score*p.weight.getLankCoeff(weights_inSentence);
+            writeCalcLog("phrase_score:"~phrase_score.to!string);
             if(p.isNegative){
                 phrase_score*=-1;
                 writeCalcLog("Phrase.isNegative==true:phrase_score*=-1");
             }
-            sent_score+=phrase_score;
-            writeCalcLog("sent_score:"~sent_score.to!string);
+            sent_score_sum+=phrase_score;
+            writeCalcLog("sent_score_sum:"~sent_score_sum.to!string);
         }
-        text_score+=sent_score*s.score;
-        writeCalcLog("text_score=sent_score*Sentence.score:"~text_score.to!string);
+        s.score=sent_score_sum/cast(real)s.phrases.length;
+        writeCalcLog("finnaly sent_score_sum:"~sent_score_sum.to!string);
+        text_score_sum+=s.scorefront*s.score;
+        writeCalcLog("text_score_sum=sent_score_sum*Sentence.score:"~text_score_sum.to!string);
     }
-    return text_score;
+    return text_score_sum/cast(real)target.sentences.length;
 }
 
 auto score(Phrase p){
-    writeCalcLog("score(Phrase):called.");
-    scope(exit) writeCalcLog("score:end.");
+    writeCalcLog("\nscore(Phrase):called.");
+    scope(exit) writeCalcLog("score(Phrase):end.\n");
     int sum;
-    writeCalcLog("Phrase.words.getWordScorelist:"~p.words.getWordScorelist.to!string);
-    foreach(word_score;p.words.getWordScorelist){
+    auto scorelist=p.words.getWordScorelist;
+    writeCalcLog("Phrase.words.getWordScorelist:"~scorelist.to!string);
+    writeCalcLog(">>details");
+    foreach(w;p.words){
+        writeCalcLog(w.suitable~":score:"~scorelist[w.number].to!string);
+    }
+    foreach(word_score;scorelist){
         sum+=word_score;
     }
     writeCalcLog("sum:"~sum.to!string);
@@ -145,11 +159,10 @@ auto score(Phrase p){
 }
 
 bool isNegative(Phrase p){
-    writeCalcLog("isNegative(Phrase):called.");
-    scope(exit) writeCalcLog("isNegative(Phrase):end.");
+    writeCalcLog("\nisNegative(Phrase):called.");
+    scope(exit) writeCalcLog("isNegative(Phrase):end.\n");
     foreach(w;p.words){
         if(isNegative(w)){
-            writeCalcLog(w.suitable~" is negative",w);
             return true;
         }
     }
@@ -157,14 +170,45 @@ bool isNegative(Phrase p){
 }
 
 auto isNegative(Word w){//TODO
-    writeCalcLog("isNegative(Word):called.");
-    scope(exit) writeCalcLog("isNegative(Word):end.");
+    writeCalcLog("\nisNegative(Word):called.");
+    scope(exit) writeCalcLog("isNegative(Word):end.\n");
     switch(w.suitable){
         case "ない":
         case "ず":
         case "ぬ":
+            writeCalcLog(w.suitable~" is negative.");
             return true;
         default:
+            writeCalcLog(w.suitable~" is not negative.");
             return false;
+    }
+}
+
+enum lankCoeff{
+    first=3.,
+    second=2,
+    third=1.5,
+    Dedault=1.,
+}
+
+real getLankCoeff(int weight,int[] weights){
+    import std.algorithm;
+    sort!("a>b")(weights);
+    int lank=-1;
+    foreach(i;0..cast(int)weights.length){
+        if(weight>=weights[i]){
+            lank=i;
+            break;
+        }
+    }
+    switch(lank){
+        case 1:
+            return lankCoeff.first;
+        case 2:
+            return lankCoeff.second;
+        case 3:
+            return lankCoeff.third;
+        default:
+            return lankCoeff.Dedault;
     }
 }
