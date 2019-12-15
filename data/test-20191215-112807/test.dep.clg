@@ -1,0 +1,402 @@
+
+calculateTextScore:called. Text 0
+
+weightPhrase:called. Text 0
+Appearance numbers of words:
+#:0
+シェル:0
+芸:0
+って:0
+ハッシュ:0
+タグ:0
+、:0
+何:0
+%:0
+くらい:0
+の:0
+人:0
+が:0
+知っ:0
+てる:0
+ん:0
+だろ:0
+う:0
+
+cursorMainWord:called Phrase 0
+# weight:1
+シェル weight:1
+芸 weight:1
+って weight:0
+weighest words:
+#
+シェル
+芸
+cursorMainWord:end Phrase 0
+
+cursorMainWord:called Phrase 1
+ハッシュ weight:1
+タグ weight:1
+、 weight:0
+weighest words:
+ハッシュ
+タグ
+cursorMainWord:end Phrase 1
+
+cursorMainWord:called Phrase 2
+何 weight:0
+weighest words:
+何
+cursorMainWord:end Phrase 2
+
+cursorMainWord:called Phrase 3
+% weight:1
+くらい weight:0
+の weight:0
+weighest words:
+%
+cursorMainWord:end Phrase 3
+
+cursorMainWord:called Phrase 4
+人 weight:1
+が weight:0
+weighest words:
+人
+cursorMainWord:end Phrase 4
+
+cursorMainWord:called Phrase 5
+知っ weight:2
+てる weight:1
+ん weight:1
+だろ weight:0
+う weight:0
+weighest words:
+知っ
+cursorMainWord:end Phrase 5
+weightPhrase:end Text 0
+text score calc start.
+each phrases' weight in Sentence 0
+in Phrase 0
+
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0, 0, 0]
+>>details
+#:score:0
+シェル:score:0
+芸:score:0
+って:score:0
+sum:0
+score(Phrase):end.
+
+Phrase.weight:0,Phrase.score:0
+phrase_score:0
+
+isNegative(Phrase):called.
+
+isNegative(Word):called.
+# is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+シェル is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+芸 is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+って is not negative.
+isNegative(Word):end.
+
+isNegative(Phrase):end.
+
+sent_score_sum:0
+in Phrase 1
+
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0, 0]
+>>details
+ハッシュ:score:0
+タグ:score:0
+、:score:0
+sum:0
+score(Phrase):end.
+
+Phrase.weight:0,Phrase.score:0
+phrase_score:0
+
+isNegative(Phrase):called.
+
+isNegative(Word):called.
+ハッシュ is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+タグ is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+、 is not negative.
+isNegative(Word):end.
+
+isNegative(Phrase):end.
+
+sent_score_sum:0
+in Phrase 2
+
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0]
+>>details
+何:score:0
+sum:0
+score(Phrase):end.
+
+Phrase.weight:0,Phrase.score:0
+phrase_score:0
+
+isNegative(Phrase):called.
+
+isNegative(Word):called.
+何 is not negative.
+isNegative(Word):end.
+
+isNegative(Phrase):end.
+
+sent_score_sum:0
+in Phrase 3
+
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0, 0]
+>>details
+%:score:0
+くらい:score:0
+の:score:0
+sum:0
+score(Phrase):end.
+
+Phrase.weight:2,Phrase.score:0
+phrase_score:0
+
+isNegative(Phrase):called.
+
+isNegative(Word):called.
+% is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+くらい is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+の is not negative.
+isNegative(Word):end.
+
+isNegative(Phrase):end.
+
+sent_score_sum:0
+in Phrase 4
+
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0]
+>>details
+人:score:0
+が:score:0
+sum:0
+score(Phrase):end.
+
+Phrase.weight:1,Phrase.score:0
+phrase_score:0
+
+isNegative(Phrase):called.
+
+isNegative(Word):called.
+人 is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+が is not negative.
+isNegative(Word):end.
+
+isNegative(Phrase):end.
+
+sent_score_sum:0
+in Phrase 5
+
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0, 0, 0, 0]
+>>details
+知る:score:0
+てる:score:0
+ん:score:0
+だ:score:0
+う:score:0
+sum:0
+score(Phrase):end.
+
+Phrase.weight:2,Phrase.score:0
+phrase_score:0
+
+isNegative(Phrase):called.
+
+isNegative(Word):called.
+知る is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+てる is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+ん is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+だ is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+う is not negative.
+isNegative(Word):end.
+
+isNegative(Phrase):end.
+
+sent_score_sum:0
+finnaly sent_score_sum:0
+text_score_sum=sent_score_sum*Sentence.score:0
+sentence end.
+
+calculateTextScore:end. Text 0
+
+calculateTextScore:called. Text 1
+
+weightPhrase:called. Text 1
+Appearance numbers of words:
+そんな:0
+こと:0
+より:0
+$:0
+5000:0
+ほしい:0
+
+cursorMainWord:called Phrase 0
+そんな weight:0
+weighest words:
+そんな
+cursorMainWord:end Phrase 0
+
+cursorMainWord:called Phrase 1
+こと weight:1
+より weight:0
+weighest words:
+こと
+cursorMainWord:end Phrase 1
+
+cursorMainWord:called Phrase 2
+$ weight:1
+5000 weight:1
+ほしい weight:0
+weighest words:
+$
+5000
+cursorMainWord:end Phrase 2
+weightPhrase:end Text 1
+text score calc start.
+each phrases' weight in Sentence 0
+in Phrase 0
+
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0]
+>>details
+そんな:score:0
+sum:0
+score(Phrase):end.
+
+Phrase.weight:0,Phrase.score:0
+phrase_score:0
+
+isNegative(Phrase):called.
+
+isNegative(Word):called.
+そんな is not negative.
+isNegative(Word):end.
+
+isNegative(Phrase):end.
+
+sent_score_sum:0
+in Phrase 1
+
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0]
+>>details
+こと:score:0
+より:score:0
+sum:0
+score(Phrase):end.
+
+Phrase.weight:1,Phrase.score:0
+phrase_score:0
+
+isNegative(Phrase):called.
+
+isNegative(Word):called.
+こと is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+より is not negative.
+isNegative(Word):end.
+
+isNegative(Phrase):end.
+
+sent_score_sum:0
+in Phrase 2
+
+score(Phrase):called.
+Phrase.words.getWordScorelist:[0, 0, 0]
+>>details
+$:score:0
+5000:score:0
+ほしい:score:0
+sum:0
+score(Phrase):end.
+
+Phrase.weight:2,Phrase.score:0
+phrase_score:0
+
+isNegative(Phrase):called.
+
+isNegative(Word):called.
+$ is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+5000 is not negative.
+isNegative(Word):end.
+
+
+isNegative(Word):called.
+ほしい is not negative.
+isNegative(Word):end.
+
+isNegative(Phrase):end.
+
+sent_score_sum:0
+finnaly sent_score_sum:0
+text_score_sum=sent_score_sum*Sentence.score:0
+sentence end.
+
+calculateTextScore:end. Text 1

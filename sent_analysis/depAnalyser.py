@@ -1,30 +1,62 @@
 import CaboCha
 import csv
+import sys
+import os
 
-sentence = "メロスは激怒した。必ず、かの邪智暴虐の王を除かなければならぬと決意した。メロスには政治がわからぬ。メロスは、村の牧人である。笛を吹き、羊と遊んで暮して来た。けれども邪悪に対しては、人一倍に敏感であった。きょう未明メロスは村を出発し、野を越え山越え、十里はなれた此のシラクスの市にやって来た。メロスには父も、母も無い。女房も無い。十六の、内気な妹と二人暮しだ。この妹は、村の或る律気な一牧人を、近々、花婿として迎える事になっていた。結婚式も間近かなのである。メロスは、それゆえ、花嫁の衣裳やら祝宴の御馳走やらを買いに、はるばる市にやって来たのだ。先ず、その品々を買い集め、それから都の大路をぶらぶら歩いた。メロスには竹馬の友があった。セリヌンティウスである。今は此のシラクスの市で、石工をしている。その友を、これから訪ねてみるつもりなのだ。久しく逢わなかったのだから、訪ねて行くのが楽しみである。歩いているうちにメロスは、まちの様子を怪しく思った。ひっそりしている。もう既に日も落ちて、まちの暗いのは当りまえだが、けれども、なんだか、夜のせいばかりでは無く、市全体が、やけに寂しい。のんきなメロスも、だんだん不安になって来た。路で逢った若い衆をつかまえて、何かあったのか、二年まえに此の市に来たときは、夜でも皆が歌をうたって、まちは賑やかであった筈だが、と質問した。若い衆は、首を振って答えなかった。しばらく歩いて老爺に逢い、こんどはもっと、語勢を強くして質問した。老爺は答えなかった。メロスは両手で老爺のからだをゆすぶって質問を重ねた。老爺は、あたりをはばかる低声で、わずか答えた。"
 
-yougen = []
-yougen_score = []
-meisi = []
-meisi_score = []
+noun_dicline = 13264
+prec_dicline = 5280
+
 
 def main():
-    Jisyo()
-    Spliter()
+    sents = []
+    readfile=sys.argv[1]
+    if os.path.exists(readfile+'.dep'):
+        os.remove(readfile+'.dep')
 
-def Spliter():
+    for line in open(readfile,'r').readlines():
+        sents.append(line)
+
+    for cnt in range(len(sents)):
+        noun,noun_score,precaution,precaution_score=setDic()
+        kosu,kakari=Sarcher(sents[cnt])
+        Spliter(cnt,sents[cnt],readfile+'.dep',kosu,kakari,noun,noun_score,precaution,precaution_score)
+    
+def Sarcher(sentence):
+    string = sentence.split('。')
+    c = CaboCha.Parser()
+    kosu = []
+    kakari = []
+    
+    for i in range(len(string)):
+        tree =  c.parse(string[i])
+        
+        for j in range(tree.chunk_size()):    
+            chunk = tree.chunk(j)
+            kosu.append(chunk.token_size)
+            kakari.append(chunk.link)
+    return kosu,kakari
+
+def Spliter(num,sentence,outname,kosu,kakari,noun,noun_score,precaution,precaution_score):
     a = []
     b = []
     tan = []
     c = CaboCha.Parser()
-    tree =  c.parse(sentence)    
+    tree =  c.parse(sentence)
+    
+    tango_counter = 1
+    bunsetu_counter = 0
+    bunsetu_num = 0
     
     for i in range(0,tree.size()):
         token = tree.token(i)
         
-        if token.surface == '。':
-            b.append('%')
-            d = Score(tan)
+        if token.surface in ['。','！','？']:
+            
+            bunsetu_num = 0
+            
+            b.append('<%>')
+            d = Score(tan,noun,noun_score,precaution,precaution_score)
             tan = []
             b.append(d)
             
@@ -41,33 +73,48 @@ def Spliter():
             b.append(features[6])
     
             a.append(b)
+            
+            if tango_counter == kosu[bunsetu_counter]:
+                a.append(['<$>',bunsetu_num,kakari[bunsetu_counter]])
+                
+                tango_counter = 0
+                bunsetu_counter += 1
+                bunsetu_num += 1
+            
+            tango_counter += 1
         
         b = []
         
-    a.append(['#'])
+    a.append(['<#>',str(num)])
     
-    with open('output.csv', 'w',newline='') as f:
-        writer = csv.writer(f)
+    with open(outname, 'a',newline='') as out:
+        writer = csv.writer(out)
         writer.writerows(a)
     
-def Jisyo():
-    with open('meisi.csv', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        l = [row for row in reader]
+def setDic():
+    noun = []
+    noun_score = []
+    precaution = []
+    precaution_score = []
+    with open('dictionary/noun.dic', encoding='utf-8') as dic:
+        noun_reader = csv.reader(dic)
+        noun_lines = [row for row in noun_reader]
     
-    for r in range(0,13264):
-        meisi.append(l[r][0])
-        meisi_score.append(int(l[r][1]))
+    for line in range(0,noun_dicline):
+        noun.append(noun_lines[line][0])
+        noun_score.append(int(noun_lines[line][1]))
         
-    with open('yougen.csv', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        l = [row for row in reader]
+    with open('dictionary/precaution.dic', encoding='utf-8') as dic:
+        prec_reader = csv.reader(dic)
+        prec_lines = [row for row in prec_reader]
     
-    for r in range(0,5280):
-        yougen.append(l[r][0])
-        yougen_score.append(int(l[r][1]))
+    for line in range(0,prec_dicline):
+        precaution.append(prec_lines[line][0])
+        precaution_score.append(int(prec_lines[line][1]))
 
-def Score(tan):
+    return noun,noun_score,precaution,precaution_score
+
+def Score(tan,noun,noun_score,precaution,precaution_score):
     tango = tan
     p = ''
     num = list(range(len(tango)))
@@ -81,9 +128,9 @@ def Score(tan):
         for j in range(len(tango)-i-1):
             j += 1
             p = p + ' ' + tango[j]
-            if p in yougen:
+            if p in precaution:
                 tan_num.append(list(range(i,j+1)))
-                score.append(yougen_score[yougen.index(p)])
+                score.append(precaution_score[precaution.index(p)])
     
     tan_num = list(set(tan_num))
     
@@ -92,11 +139,11 @@ def Score(tan):
     
     for t in range(len(num)):
         try:
-            score.append(meisi_score[meisi.index(tan[num[t]])])
+            score.append(noun_score[noun.index(tan[num[t]])])
         except:
             pass
         try:
-            score.append(yougen_score[yougen.index(tan[num[t]])])
+            score.append(precaution_score[precaution.index(tan[num[t]])])
         except:
             pass
     
@@ -106,7 +153,13 @@ def Score(tan):
         return sum(score) / len(score)
 
 def Hinnsi(w,x,y,z):
-    if w == '感動詞':
+    if w == 'その他':
+        return 0
+
+    elif w == 'フィラー':
+        return 1
+
+    elif w == '感動詞':
         return 2
     
     elif w == '記号':
@@ -153,6 +206,8 @@ def Hinnsi(w,x,y,z):
             return 20
         elif x == '副助詞':
             return 21
+        elif x == '副助詞／並立助詞／終助詞':
+            return 22
         elif x == '並立助詞':
             return 23
         elif x == '連体化':
@@ -205,7 +260,7 @@ def Hinnsi(w,x,y,z):
             elif y == '人名':
                 if z == '一般':
                     return 42
-                elif z == '性':
+                elif z == '姓':
                     return 43
                 elif z == '名':
                     return 44

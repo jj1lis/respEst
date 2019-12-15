@@ -7,8 +7,8 @@ import context.pos;
 import context.io;
 
 uint[] cursorMainWord(Phrase phrase){
-    writeCalcLog("\ncursorMainWord:called",phrase);
-    scope(exit) writeCalcLog("cursorMainWord:end",phrase);
+    writeCalcLog("cursorMainWord:",phrase);
+    //scope(exit) writeCalcLog("cursorMainWord:end",phrase);
     auto words=phrase.words;
     uint[] word_weight=new uint[words.length];
     foreach(cnt;0..words.length-1){
@@ -63,8 +63,8 @@ outer:switch(poses.pos){
 }
 
 void weightPhrase(Text target){
-    writeCalcLog("\nweightPhrase:called.",target);
-    scope(exit) writeCalcLog("weightPhrase:end",target);
+    writeCalcLog("weightPhrase:",target);
+    //scope(exit) writeCalcLog("weightPhrase:end",target);
     Word[] words_inText=new Word[0];
     foreach(Sentence s;target.sentences){
         foreach(Phrase p;s.phrases){
@@ -84,7 +84,7 @@ void weightPhrase(Text target){
     }
     writeCalcLog("Appearance numbers of words:");
     foreach(w;words_inText){
-        writeCalcLog(w.morpheme~":"~tmp_word_counter[w.suitable].to!string);
+        writeCalcLog(w.morpheme~":"~(tmp_word_counter[w.suitable]+1).to!string);
     }
 
     foreach(Sentence s;target.sentences){
@@ -104,11 +104,11 @@ void weightPhrase(Text target){
 }
 
 auto calculateTextScore(Text target){//TODO
-    writeCalcLog("\ncalculateTextScore:called.",target);
-    scope(exit) writeCalcLog("calculateTextScore:end.",target);
+    writeCalcLog("calculateTextScore:",target);
+    //scope(exit) writeCalcLog("calculateTextScore:end.",target);
     real text_score_sum=0;
     weightPhrase(target);
-    writeCalcLog("text score calc start.");
+    //writeCalcLog("text score calc start.");
     foreach(s;target.sentences){
         writeCalcLog("each phrases' weight in",s);
         real sent_score_sum=0;
@@ -142,8 +142,8 @@ auto calculateTextScore(Text target){//TODO
 }
 
 auto score(Phrase p){
-    writeCalcLog("\nscore(Phrase):called.");
-    scope(exit) writeCalcLog("score(Phrase):end.\n");
+    writeCalcLog("score(Phrase):");
+    //scope(exit) writeCalcLog("score(Phrase):end.\n");
     int sum;
     auto scorelist=p.words.getWordScorelist;
     writeCalcLog("Phrase.words.getWordScorelist:"~scorelist.to!string);
@@ -159,8 +159,8 @@ auto score(Phrase p){
 }
 
 bool isNegative(Phrase p){
-    writeCalcLog("\nisNegative(Phrase):called.");
-    scope(exit) writeCalcLog("isNegative(Phrase):end.\n");
+    writeCalcLog("isNegative(Phrase):");
+    //scope(exit) writeCalcLog("isNegative(Phrase):end.\n");
     foreach(w;p.words){
         if(isNegative(w)){
             return true;
@@ -170,8 +170,8 @@ bool isNegative(Phrase p){
 }
 
 auto isNegative(Word w){//TODO
-    writeCalcLog("\nisNegative(Word):called.");
-    scope(exit) writeCalcLog("isNegative(Word):end.\n");
+    writeCalcLog("isNegative(Word):called.");
+    //scope(exit) writeCalcLog("isNegative(Word):end.\n");
     switch(w.suitable){
         case "ない":
         case "ず":
