@@ -134,7 +134,7 @@ auto writeCalcLog(T)(string log,T target,string filename=meta.filename~".log"){
     }
 }
 
-auto writeCalcLog(string log,string filename=meta.filename~".clg"){
+auto writeCalcLog(string log,string filename=meta.filename~".log"){
     try{
         appendln(filename,log);
     }catch(FileException fe){
