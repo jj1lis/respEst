@@ -74,6 +74,8 @@ def Spliter(num,sentence,outname,kosu,kakari,noun,noun_score,precaution,precauti
     
             a.append(b)
             
+            #TODO
+            #range error often happen here
             if tango_counter == kosu[bunsetu_counter]:
                 a.append(['<$>',bunsetu_num,kakari[bunsetu_counter]])
                 

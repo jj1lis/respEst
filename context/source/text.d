@@ -68,8 +68,13 @@ class Word:Common{
             _pos_id=to!int(record[1]);
             _poses=idToPoses(_pos_id);
         }catch{
-            throw new stringToIntException(record[1],this.number,
-                    parent_number,granpa_number,dgranpa_number);
+            if(record[1]==""){
+                _pos_id=-1;
+                _poses=Poses(Pos.unknown);
+            }else{
+                throw new stringToIntException(record[1],this.number,
+                        parent_number,granpa_number,dgranpa_number);
+            }
         }
         _base=record[2];
     }

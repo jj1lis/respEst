@@ -44,7 +44,7 @@ void main(string[] args){
             auto filelines=devideFileByLine(fn);
             foreach(read_text_num;textNums(filelines)){
                 meta=Meta(Clock.currTime,fn);
-                Text text;
+                scope Text text;
                 try{
                     text=new Text(separateText(filelines,read_text_num),read_text_num);
                 }catch(stringToIntException stie){
@@ -60,10 +60,10 @@ void main(string[] args){
                 }
 
                 text.setScore(calculateTextScore(text));
-                writeText(meta.filename~".ctx",text);
-                writeAnalysis(meta.filename~".als",text);
+                writeText(text);
+                writeAnalysis(text);
 
-                //debugSpace(text);
+                debugSpace(text);
             }
         }
     }
