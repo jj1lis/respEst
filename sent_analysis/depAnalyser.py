@@ -276,7 +276,7 @@ def Hinnsi(w,x,y,z):
         elif x == '接続詞的':
             return 49
         elif x == '接尾':
-            if y == 'サ変動詞':
+            if y == 'サ変接続':
                 return 50
             elif y == '一般':
                 return 51
@@ -316,6 +316,8 @@ def Hinnsi(w,x,y,z):
             return 67
     elif w == '連体詞':
         return 68
+    else:
+        return 100
             
 
 main()

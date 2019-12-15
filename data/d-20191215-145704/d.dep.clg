@@ -1,0 +1,186 @@
+calculateTextScore: Text 0
+weightPhrase: Text 0
+Appearance numbers of words:
+Python:1
+に関する:1
+包括:1
+的:2
+で:2
+基本:1
+的:2
+な:2
+知識:1
+は:1
+身:1
+に:1
+付ける:1
+こと:1
+が:1
+できる:1
+cursorMainWord: Phrase 0
+Python weight:1
+に関する weight:0
+weighest words:
+Python
+cursorMainWord: Phrase 1
+包括 weight:1
+的 weight:1
+で weight:0
+weighest words:
+包括
+的
+cursorMainWord: Phrase 2
+基本 weight:1
+的 weight:1
+な weight:0
+weighest words:
+基本
+的
+cursorMainWord: Phrase 3
+知識 weight:1
+は weight:0
+weighest words:
+知識
+cursorMainWord: Phrase 4
+身 weight:1
+に weight:0
+weighest words:
+身
+cursorMainWord: Phrase 5
+付ける weight:0
+weighest words:
+付ける
+cursorMainWord: Phrase 6
+こと weight:1
+が weight:0
+weighest words:
+こと
+cursorMainWord: Phrase 7
+できる weight:0
+weighest words:
+できる
+each phrases' weight in Sentence 0
+in Phrase 0
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0]
+>>details
+Python:score:0
+に関する:score:0
+sum:0
+Phrase.weight:0,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+Python is not negative.
+isNegative(Word):called.
+に関する is not negative.
+sent_score_sum:0
+in Phrase 1
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0, 0]
+>>details
+包括:score:0
+的:score:0
+だ:score:0
+sum:0
+Phrase.weight:5,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+包括 is not negative.
+isNegative(Word):called.
+的 is not negative.
+isNegative(Word):called.
+だ is not negative.
+sent_score_sum:0
+in Phrase 2
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0, 0]
+>>details
+基本:score:0
+的:score:0
+だ:score:0
+sum:0
+Phrase.weight:5,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+基本 is not negative.
+isNegative(Word):called.
+的 is not negative.
+isNegative(Word):called.
+だ is not negative.
+sent_score_sum:0
+in Phrase 3
+score(Phrase):
+Phrase.words.getWordScorelist:[1, 0]
+>>details
+知識:score:1
+は:score:0
+sum:1
+Phrase.weight:1,Phrase.score:1
+phrase_score:1.5
+isNegative(Phrase):
+isNegative(Word):called.
+知識 is not negative.
+isNegative(Word):called.
+は is not negative.
+sent_score_sum:1.5
+in Phrase 4
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0]
+>>details
+身:score:0
+に:score:0
+sum:0
+Phrase.weight:0,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+身 is not negative.
+isNegative(Word):called.
+に is not negative.
+sent_score_sum:1.5
+in Phrase 5
+score(Phrase):
+Phrase.words.getWordScorelist:[0]
+>>details
+付ける:score:0
+sum:0
+Phrase.weight:2,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+付ける is not negative.
+sent_score_sum:1.5
+in Phrase 6
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0]
+>>details
+こと:score:0
+が:score:0
+sum:0
+Phrase.weight:1,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+こと is not negative.
+isNegative(Word):called.
+が is not negative.
+sent_score_sum:1.5
+in Phrase 7
+score(Phrase):
+Phrase.words.getWordScorelist:[0]
+>>details
+できる:score:0
+sum:0
+Phrase.weight:1,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+できる is not negative.
+sent_score_sum:1.5
+finnaly sent_score_sum:1.5
+text_score_sum=sent_score_sum*Sentence.score:0.09375
+sentence end.
+

@@ -10,9 +10,9 @@ import context.calc;
 
 class Common{
     private int _number;
-    private int _parent_number;
-    private int _granpa_number;
-    private int _dgranpa_number;
+    private int _parent_number=int.max;
+    private int _granpa_number=int.max;
+    private int _dgranpa_number=int.max;
 
     @property{
         int number(){return _number;}
@@ -23,23 +23,17 @@ class Common{
 
     this(int number){
         this._number=number;
-        this._parent_number=int.max;
-        this._granpa_number=int.max;
-        this._dgranpa_number=int.max;
     }
 
     this(int number,int parent_number){
         this._number=number;
         this._parent_number=parent_number;
-        this._granpa_number=int.max;
-        this._dgranpa_number=int.max;
     }
 
     this(int number,int parent_number,int granpa_number){
         this._number=number;
         this._parent_number=parent_number;
         this._granpa_number=granpa_number;
-        this._dgranpa_number=int.max;
     }
 
     this(int number,int parent_number,int granpa_number,int dgranpa_number){
