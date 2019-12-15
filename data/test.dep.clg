@@ -1,0 +1,16 @@
+
+calculateTextScore:called. Text 0
+
+weightPhrase:called. Text 0
+Appearance numbers of words:
+weightPhrase:end Text 0
+text score calc start.
+calculateTextScore:end. Text 0
+
+calculateTextScore:called. Text 1
+
+weightPhrase:called. Text 1
+Appearance numbers of words:
+weightPhrase:end Text 1
+text score calc start.
+calculateTextScore:end. Text 1

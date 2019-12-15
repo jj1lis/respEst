@@ -148,7 +148,7 @@ class Sentence:Common{
         string[] tmp_phrase;
         int cnt_phrase;
         foreach(cnt;0..line_sentence.length){
-            if(line_sentence[cnt].split(",")[0]!="$"){
+            if(line_sentence[cnt].split(",")[0]!="<$>"){
                 tmp_phrase~=line_sentence[cnt];
             }else{
                 auto exflag=false;
@@ -205,7 +205,7 @@ class Text:Common{
         string[] tmp_sentence;
         int cnt_sentence;
         foreach(cnt;0..line_text.length){
-            if(line_text[cnt].split(",")[0]!="%"){
+            if(line_text[cnt].split(",")[0]!="<%>"){
                 tmp_sentence~=line_text[cnt];
             }else{
                 float score_sentence;

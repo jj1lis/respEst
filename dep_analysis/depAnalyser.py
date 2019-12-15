@@ -55,7 +55,7 @@ def Spliter(num,sentence,outname,kosu,kakari,noun,noun_score,precaution,precauti
             
             bunsetu_num = 0
             
-            b.append('%')
+            b.append('<%>')
             d = Score(tan,noun,noun_score,precaution,precaution_score)
             tan = []
             b.append(d)
@@ -75,7 +75,7 @@ def Spliter(num,sentence,outname,kosu,kakari,noun,noun_score,precaution,precauti
             a.append(b)
             
             if tango_counter == kosu[bunsetu_counter]:
-                a.append(['$',bunsetu_num,kakari[bunsetu_counter]])
+                a.append(['<$>',bunsetu_num,kakari[bunsetu_counter]])
                 
                 tango_counter = 0
                 bunsetu_counter += 1
@@ -85,7 +85,7 @@ def Spliter(num,sentence,outname,kosu,kakari,noun,noun_score,precaution,precauti
         
         b = []
         
-    a.append(['#',str(num)])
+    a.append(['<#>',str(num)])
     
     with open(outname, 'a',newline='') as out:
         writer = csv.writer(out)
@@ -153,7 +153,13 @@ def Score(tan,noun,noun_score,precaution,precaution_score):
         return sum(score) / len(score)
 
 def Hinnsi(w,x,y,z):
-    if w == '感動詞':
+    if w == 'その他':
+        return 0
+
+    elif w == 'フィラー':
+        return 1
+
+    elif w == '感動詞':
         return 2
     
     elif w == '記号':
@@ -254,7 +260,7 @@ def Hinnsi(w,x,y,z):
             elif y == '人名':
                 if z == '一般':
                     return 42
-                elif z == '性':
+                elif z == '姓':
                     return 43
                 elif z == '名':
                     return 44

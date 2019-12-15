@@ -1,0 +1,36 @@
+<text:0>
+  score:-nan
+</text>
+<text:1>
+  score:-nan
+</text>
+<text:2>
+  score:-nan
+</text>
+<text:3>
+  score:-nan
+</text>
+<text:4>
+  score:-nan
+</text>
+<text:5>
+  score:-nan
+</text>
+<text:6>
+  score:-nan
+</text>
+<text:7>
+  score:-nan
+</text>
+<text:8>
+  score:-nan
+</text>
+<text:9>
+  score:-nan
+</text>
+<text:10>
+  score:-nan
+</text>
+<text:11>
+  score:-nan
+</text>
