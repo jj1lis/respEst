@@ -36,10 +36,9 @@ Meta meta;
 void main(string[] args){
     if(args.length<2){
         stderr.writeln("error: "~new ArgumentNumberException("argument is too little").msg);
-    //}else if(args.length>2){
-    //    stderr.writeln("error: "~new ArgumentNumberException("arguments are too many").msg);
     }else{
         foreach(fn;args[1..$]){
+            fn.writeln;
             initFiles(fn);
             auto filelines=devideFileByLine(fn);
             foreach(read_text_num;textNums(filelines)){
@@ -62,6 +61,7 @@ void main(string[] args){
                 text.setScore(calculateTextScore(text));
                 writeText(text);
                 writeAnalysis(text);
+                writeSummary(text);
 
                 debugSpace(text);
             }

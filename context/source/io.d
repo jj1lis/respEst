@@ -4,6 +4,7 @@ import std.stdio;
 import std.file;
 import std.string;
 import std.conv;
+import std.array:join;
 
 import context.app;
 import context.exception;
@@ -25,9 +26,9 @@ auto devideFileByLine(string filename){
     }
 }
 
-auto separateText(string[] file_lines,int text_number){//todo!:this dumps myst bugs
-    string[] tmp_text=new string[0];
-    int cnt_text=0;
+auto separateText(string[] file_lines,int text_number){
+    string[] tmp_text;
+    int cnt_text;
     for(int cnt=0;cnt<file_lines.length;cnt++){
         if(file_lines[cnt].split(",")[0]!="<#>"){
             tmp_text.length++;
@@ -64,8 +65,11 @@ auto initFiles(string file){
         if(exists(file~".als")&&isFile(file~".als")){
             remove(file~".als");
         }
-        if(exists(file~".clg")&&isFile(file~".clg")){
-            remove(file~".clg");
+        if(exists(file~".log")&&isFile(file~".log")){
+            remove(file~".log");
+        }
+        if(exists(file~".sum")&&isFile(file~".sum")){
+            remove(file~".sum");
         }
     }catch(FileException fe){
         stderr.writeln("error: "~fe.msg);
@@ -73,55 +77,61 @@ auto initFiles(string file){
 }
 
 auto writeText(Text target,string filename=meta.filename~".ctx"){
-    scope(exit) appendln(filename,"<#>,"~to!string(target.number)~
-            ","~to!string(target.score)~"");
-    foreach(cnt_sentence;0..target.sentences.length){
-        auto s=target.sentences[cnt_sentence];
-        scope(exit) appendln(filename,"<%>,"~to!string(s.number)~
-                ","~to!string(s.scorefront)~"");
-        foreach(cnt_phrase;0..s.phrases.length){
-            auto p=s.phrases[cnt_phrase]; 
-            scope(exit) appendln(filename,"<$>,"~to!string(p.number)~
-                    ","~to!string(p.dependency)~"");
-            foreach(cnt_word;0..p.words.length){
-                auto w=p.words[cnt_word];
-                appendln(filename,w.morpheme()~","~w.poses.pos.to!string~
-                        ","~w.poses.subpos1.to!string~","~w.poses.subpos2.to!string~
-                        ","~w.poses.subpos3.to!string~","~w.base~"");
+    string[] lines;
+    {
+        scope(exit) lines~="<#>,"~to!string(target.number)~","~target.score.to!string;
+        foreach(s;target.sentences){
+            scope(exit) lines~="<%>,"~to!string(s.number)~","~s.score.to!string;
+            foreach(p;s.phrases){
+                scope(exit) lines~="<$>,"~to!string(p.number)~","~p.score.to!string;
+                foreach(w;p.words){
+                    lines~=w.morpheme()~","~w.poses.pos.to!string~","~w.poses.subpos1.to!string~
+                        ","~w.poses.subpos2.to!string~","~w.poses.subpos3.to!string~","~w.base;
+                }
             }
         }
+    }
+    try{
+        appendln(filename,lines.join("\n"));
+    }catch(FileException fe){
+        stderr.writeln("error: "~fe.msg);
     }
 }
 
 auto writeAnalysis(Text target,string filename=meta.filename~".als"){
-    appendln(filename,"<#text:"~target.number.to!string~">");
-    scope(exit) appendln(filename,"</text>");
-    appendln(filename,"\tscore:".detab(2)~target.score.to!string~"");
-    foreach(cnt_sentence;0..target.sentences.length){
-        auto s=target.sentences[cnt_sentence];
-        appendln(filename,"\t<%sentence:".detab(2)~s.number.to!string~">");
-        scope(exit) appendln(filename,"\t</sentence>".detab(2));
-        appendln(filename,"\t\tscore           :".detab(2)~s.score.to!string~"");
-        appendln(filename,"\t\tscore frontstage:".detab(2)~s.scorefront.to!string~"");
-        foreach(cnt_phrase;0..s.phrases.length){
-            auto p=s.phrases[cnt_phrase];
-            appendln(filename,"\t\t<$phrase:".detab(2)~p.number.to!string~">");
-            scope(exit) appendln(filename,"\t\t</phrase>".detab(2));
-            appendln(filename,"\t\t\tdepend on  :phrase ".detab(2)~p.dependency.to!string~"");
-            appendln(filename,"\t\t\tbe depended:by phrase ".detab(2)~p.getBe_depended.to!string~"");
-            appendln(filename,"\t\t\tweight     :".detab(2)~p.weight.to!string~"");
-            foreach(cnt_word;0..p.words.length){
-                auto w=p.words[cnt_word];
-                appendln(filename,"\t\t\t<word:".detab(2)~w.number.to!string~">");
-                scope(exit) appendln(filename,"\t\t\t</word>".detab(2));
-                appendln(filename,"\t\t\t\tmorpheme:".detab(2)~w.morpheme~"");
-                appendln(filename,"\t\t\t\tpos     :".detab(2)~w.poses.pos.to!string~"");
-                appendln(filename,"\t\t\t\tsubpos1 :".detab(2)~w.poses.subpos1.to!string~"");
-                appendln(filename,"\t\t\t\tsubpos2 :".detab(2)~w.poses.subpos2.to!string~"");
-                appendln(filename,"\t\t\t\tsubpos3 :".detab(2)~w.poses.subpos3.to!string~"");
-                appendln(filename,"\t\t\t\tbase    :".detab(2)~w.base~"");
+    string[] lines;
+    {
+        lines~="<#text:"~target.number.to!string~">";
+        scope(exit) lines~="</text>";
+        lines~=cast(string)"\tscore:".detab(2)~target.score.to!string;
+        foreach(s;target.sentences){
+            lines~=cast(string)"\t<%sentence:".detab(2)~s.number.to!string~">";
+            scope(exit) lines~=cast(string)"\t</sentence>".detab(2);
+            lines~=cast(string)"\t\tscore           :".detab(2)~s.score.to!string;
+            lines~=cast(string)"\t\tscore frontstage:".detab(2)~s.scorefront.to!string;
+            foreach(p;s.phrases){
+                lines~=cast(string)"\t\t<$phrase:".detab(2)~p.number.to!string~">";
+                scope(exit) lines~=cast(string)"\t\t</phrase>".detab(2);
+                lines~=cast(string)"\t\t\tdepend on  :phrase ".detab(2)~p.dependency.to!string;
+                lines~=cast(string)"\t\t\tbe depended:by phrase ".detab(2)~p.getBe_depended.to!string;
+                lines~=cast(string)"\t\t\tweight     :".detab(2)~p.weight.to!string;
+                foreach(w;p.words){
+                    lines~=cast(string)"\t\t\t<word:".detab(2)~w.number.to!string~">";
+                    scope(exit) lines~=cast(string)"\t\t\t</word>".detab(2);
+                    lines~=cast(string)"\t\t\t\tmorpheme:".detab(2)~w.morpheme;
+                    lines~=cast(string)"\t\t\t\tpos     :".detab(2)~w.poses.pos.to!string;
+                    lines~=cast(string)"\t\t\t\tsubpos1 :".detab(2)~w.poses.subpos1.to!string;
+                    lines~=cast(string)"\t\t\t\tsubpos2 :".detab(2)~w.poses.subpos2.to!string;
+                    lines~=cast(string)"\t\t\t\tsubpos3 :".detab(2)~w.poses.subpos3.to!string;
+                    lines~=cast(string)"\t\t\t\tbase    :".detab(2)~w.base;
+                }
             }
         }
+    }
+    try{
+        appendln(filename,lines.join("\n"));
+    }catch(FileException fe){
+        stderr.writeln("error: "~fe.msg);
     }
 }
 
@@ -137,6 +147,24 @@ auto writeCalcLog(T)(string log,T target,string filename=meta.filename~".log"){
 auto writeCalcLog(string log,string filename=meta.filename~".log"){
     try{
         appendln(filename,log);
+    }catch(FileException fe){
+        stderr.writeln("error: "~fe.msg);
+    }
+}
+
+auto writeSummary(Text target,string filename=meta.filename~".sum"){
+    string[] lines;
+    foreach(s;target.sentences){
+        scope(exit) lines~="。";
+        foreach(p;s.phrases){
+            foreach(w;p.words){
+                lines~=w.morpheme;
+            }
+        }
+    }
+    lines~=":score->"~target.score.to!string;
+    try{
+        appendln(filename,lines.join);
     }catch(FileException fe){
         stderr.writeln("error: "~fe.msg);
     }

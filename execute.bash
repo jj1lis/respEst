@@ -36,7 +36,7 @@ python3 sent_analysis/depAnalyser.py $DIR/$file
 echo "execute.bash: $file.dep generated."
 echo "execute.bash: run 'context/context $DIR/$file.dep'"
 context/context $DIR/$file.dep
-echo "execute.bash: $file.dep.ctx, $file.dep.als, $file.dep.clg generated."
+echo "execute.bash: $file.dep.ctx, $file.dep.als, $file.dep.clg, $file.dep.sum generated."
 echo -e "execute.bash: completed analysis.\n"
 
 echo -e "All Processes Completed!\n"

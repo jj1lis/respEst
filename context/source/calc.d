@@ -74,29 +74,29 @@ void weightPhrase(Text target){
         }
     }
 
-    uint[string] tmp_word_counter;
+    uint[string] word_weight;
     foreach(w;words_inText){
-        if(w.suitable in tmp_word_counter){
-            tmp_word_counter[w.suitable]++;
+        if(w.suitable in word_weight){
+            word_weight[w.suitable]++;
         }else{
-            tmp_word_counter[w.suitable]=0;
+            word_weight[w.suitable]=0;
         }
     }
     writeCalcLog("Appearance numbers of words:");
     foreach(w;words_inText){
-        writeCalcLog(w.morpheme~":"~(tmp_word_counter[w.suitable]+1).to!string);
+        writeCalcLog(w.morpheme~":"~(word_weight[w.suitable]+1).to!string);
     }
 
     foreach(Sentence s;target.sentences){
         foreach(p;s.phrases){
             foreach(cursor;p.cursorMainWord){
-                tmp_word_counter[p.words[cursor].suitable]+=p.getBe_depended.length;
+                word_weight[p.words[cursor].suitable]+=p.getBe_depended.length;
             }
         }
         foreach(p;s.phrases){
             uint phrase_weight;
             foreach(i;0..p.words.length){
-                phrase_weight+=tmp_word_counter[p.words[i].suitable];
+                phrase_weight+=word_weight[p.words[i].suitable];
             }
             p.weight(phrase_weight);
         }
@@ -133,9 +133,9 @@ auto calculateTextScore(Text target){//TODO
             sent_score_sum+=phrase_score;
             writeCalcLog("sent_score_sum:"~sent_score_sum.to!string);
         }
-        s.score=sent_score_sum/cast(real)s.phrases.length;
+        s.score=sent_score_sum/*/cast(real)s.phrases.length*/;
         writeCalcLog("finnaly sent_score_sum:"~sent_score_sum.to!string);
-        text_score_sum+=s.scorefront*s.score;
+        text_score_sum+=s.scorefront+s.score;
         writeCalcLog("text_score_sum=sent_score_sum*Sentence.score:"~text_score_sum.to!string);
     }
     return text_score_sum/cast(real)target.sentences.length;
@@ -172,10 +172,12 @@ bool isNegative(Phrase p){
 auto isNegative(Word w){//TODO
     writeCalcLog("isNegative(Word):called.");
     //scope(exit) writeCalcLog("isNegative(Word):end.\n");
-    switch(w.suitable){
+    switch(w.base){
         case "ない":
         case "ず":
         case "ぬ":
+        case "不":
+        case "無":
             writeCalcLog(w.suitable~" is negative.");
             return true;
         default:
