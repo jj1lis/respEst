@@ -8,67 +8,35 @@ import context.exception;
 import context.pos;
 import context.calc;
 
-enum Type{
-    t_word,
-    t_phrase,
-    t_stc,
-    t_text,
-};
-
-string TypeToString(Type type){
-    switch(type){
-        case Type.t_word:
-            return "Word";
-        case Type.t_stc:
-            return "Sentence";
-        case Type.t_text:
-            return "Text";
-        default:
-            return "Unknown";
-    }
-}
-
 class Common{
-    Type _type;
     private int _number;
-    private int _parent_number;
-    private int _granpa_number;
-    private int _dgranpa_number;
+    private int _parent_number=int.max;
+    private int _granpa_number=int.max;
+    private int _dgranpa_number=int.max;
 
     @property{
-        Type type(){return _type;}
         int number(){return _number;}
         int parent_number(){return _parent_number;}
         int granpa_number(){return _granpa_number;}
         int dgranpa_number(){return _dgranpa_number;}
     }
 
-    this(Type target,int number){
-        _type=target;
+    this(int number){
         this._number=number;
-        this._parent_number=int.max;
-        this._granpa_number=int.max;
-        this._dgranpa_number=int.max;
     }
 
-    this(Type target,int number,int parent_number){
-        _type=target;
+    this(int number,int parent_number){
         this._number=number;
         this._parent_number=parent_number;
-        this._granpa_number=int.max;
-        this._dgranpa_number=int.max;
     }
 
-    this(Type target,int number,int parent_number,int granpa_number){
-        _type=target;
+    this(int number,int parent_number,int granpa_number){
         this._number=number;
         this._parent_number=parent_number;
         this._granpa_number=granpa_number;
-        this._dgranpa_number=int.max;
     }
 
-    this(Type target,int number,int parent_number,int granpa_number,int dgranpa_number){
-        _type=target;
+    this(int number,int parent_number,int granpa_number,int dgranpa_number){
         this._number=number;
         this._parent_number=parent_number;
         this._granpa_number=granpa_number;
@@ -90,7 +58,7 @@ class Word:Common{
     }
 
     this(string line_word,int number,int phrase_number,int stc_number,int text_number){
-        super(Type.t_word,number,phrase_number,stc_number,text_number);
+        super(number,phrase_number,stc_number,text_number);
         if(line_word.length==0){
             throw new ElementEmptyException(this.number);
         }
@@ -100,8 +68,13 @@ class Word:Common{
             _pos_id=to!int(record[1]);
             _poses=idToPoses(_pos_id);
         }catch{
-            throw new stringToIntException(record[1],this.number,
-                    parent_number,granpa_number,dgranpa_number);
+            if(record[1]==""){
+                _pos_id=-1;
+                _poses=Poses(Pos.unknown);
+            }else{
+                throw new stringToIntException(record[1],this.number,
+                        parent_number,granpa_number,dgranpa_number);
+            }
         }
         _base=record[2];
     }
@@ -128,7 +101,7 @@ class Phrase:Common{
     }
 
     this(string[] line_phrase,int number,int stc_number,int text_number,int depend_to){
-        super(Type.t_phrase,number,stc_number,text_number);
+        super(number,stc_number,text_number);
         if(line_phrase.length==0){
             throw new ElementEmptyException(this.number);
         }
@@ -165,7 +138,7 @@ class Sentence:Common{
     }
 
     this(string[] line_sentence,float score,int number,int text_number){
-        super(Type.t_stc,number,text_number);
+        super(number,text_number);
         if(line_sentence.length==0){
             throw new ElementEmptyException(this.number);
         }
@@ -174,7 +147,7 @@ class Sentence:Common{
         string[] tmp_phrase;
         int cnt_phrase;
         foreach(cnt;0..line_sentence.length){
-            if(line_sentence[cnt].split(",")[0]!="$"){
+            if(line_sentence[cnt].split(",")[0]!="<$>"){
                 tmp_phrase~=line_sentence[cnt];
             }else{
                 auto exflag=false;
@@ -223,7 +196,7 @@ class Text:Common{
     }
 
     this(string[] line_text,int number){
-        super(Type.t_text,number);
+        super(number);
         if(line_text.length==0){
             throw new ElementEmptyException(this.number);
         }
@@ -231,7 +204,7 @@ class Text:Common{
         string[] tmp_sentence;
         int cnt_sentence;
         foreach(cnt;0..line_text.length){
-            if(line_text[cnt].split(",")[0]!="%"){
+            if(line_text[cnt].split(",")[0]!="<%>"){
                 tmp_sentence~=line_text[cnt];
             }else{
                 float score_sentence;

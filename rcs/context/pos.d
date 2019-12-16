@@ -159,9 +159,9 @@ enum Pos_id{
 
 struct Poses{
     Pos pos;
-    Subpos1 subpos1;
-    Subpos2 subpos2;
-    Subpos3 subpos3;
+    Subpos1 subpos1=Subpos1.none;
+    Subpos2 subpos2=Subpos2.none;
+    Subpos3 subpos3=Subpos3.none;
     this(Pos p, Subpos1 s1,Subpos2 s2, Subpos3 s3){
         pos=p;
         subpos1=s1;
@@ -172,13 +172,10 @@ struct Poses{
         pos=p;
         subpos1=s1;
         subpos2=s2;
-        subpos3=Subpos3.none;
     }
     this(Pos p, Subpos1 s1){
         pos=p;
         subpos1=s1;
-        subpos2=Subpos2.none;
-        subpos3=Subpos3.none;
     }
     this(Pos p){
         if(p==Pos.unknown){
@@ -188,9 +185,6 @@ struct Poses{
             subpos3=Subpos3.unknown;
         }else{
             pos=p;
-            subpos1=Subpos1.none;
-            subpos2=Subpos2.none;
-            subpos3=Subpos3.none;
         }
     }
 }

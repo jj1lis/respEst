@@ -44,7 +44,7 @@ void main(string[] args){
             auto filelines=devideFileByLine(fn);
             foreach(read_text_num;textNums(filelines)){
                 meta=Meta(Clock.currTime,fn);
-                scope Text text;
+                Text text;
                 try{
                     text=new Text(separateText(filelines,read_text_num),read_text_num);
                 }catch(stringToIntException stie){

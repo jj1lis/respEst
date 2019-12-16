@@ -1,0 +1,508 @@
+calculateTextScore: Text 0
+weightPhrase: Text 0
+Appearance numbers of words:
+おねしょ:1
+を:1
+する:2
+よう:1
+な:1
+悪人:1
+は:1
+しゃっくり:1
+し:2
+て:1
+死ん:1
+で:2
+しまえ:1
+そして:1
+、:1
+阿鼻叫喚:1
+の:2
+地獄:1
+絵図:1
+の:2
+世界:1
+で:2
+壊さ:1
+れろ:1
+cursorMainWord: Phrase 0
+おねしょ weight:1
+を weight:0
+weighest words:
+おねしょ
+cursorMainWord: Phrase 1
+する weight:2
+よう weight:1
+な weight:0
+weighest words:
+する
+cursorMainWord: Phrase 2
+悪人 weight:1
+は weight:0
+weighest words:
+悪人
+cursorMainWord: Phrase 3
+しゃっくり weight:1
+し weight:2
+て weight:0
+weighest words:
+し
+cursorMainWord: Phrase 4
+死ん weight:2
+で weight:0
+しまえ weight:0
+weighest words:
+死ん
+cursorMainWord: Phrase 0
+そして weight:1
+、 weight:0
+weighest words:
+そして
+cursorMainWord: Phrase 1
+阿鼻叫喚 weight:1
+の weight:0
+weighest words:
+阿鼻叫喚
+cursorMainWord: Phrase 2
+地獄 weight:1
+絵図 weight:1
+の weight:0
+weighest words:
+地獄
+絵図
+cursorMainWord: Phrase 3
+世界 weight:1
+で weight:0
+weighest words:
+世界
+cursorMainWord: Phrase 4
+壊さ weight:2
+れろ weight:0
+weighest words:
+壊さ
+each phrases' weight in Sentence 0
+in Phrase 0
+score(Phrase):
+Phrase.words.getWordScorelist:[-1, 0]
+>>details
+おねしょ:score:-1
+を:score:0
+sum:-1
+Phrase.weight:0,Phrase.score:-1
+phrase_score:-1
+isNegative(Phrase):
+isNegative(Word):called.
+おねしょ is not negative.
+isNegative(Word):called.
+を is not negative.
+sent_score_sum:-1
+in Phrase 1
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0, 0]
+>>details
+する:score:0
+よう:score:0
+だ:score:0
+sum:0
+Phrase.weight:2,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+する is not negative.
+isNegative(Word):called.
+よう is not negative.
+isNegative(Word):called.
+だ is not negative.
+sent_score_sum:-1
+in Phrase 2
+score(Phrase):
+Phrase.words.getWordScorelist:[-1, 0]
+>>details
+悪人:score:-1
+は:score:0
+sum:-1
+Phrase.weight:1,Phrase.score:-1
+phrase_score:-1.5
+isNegative(Phrase):
+isNegative(Word):called.
+悪人 is not negative.
+isNegative(Word):called.
+は is not negative.
+sent_score_sum:-2.5
+in Phrase 3
+score(Phrase):
+Phrase.words.getWordScorelist:[-1, 0, 0]
+>>details
+しゃっくり:score:-1
+する:score:0
+て:score:0
+sum:-1
+Phrase.weight:2,Phrase.score:-1
+phrase_score:-3
+isNegative(Phrase):
+isNegative(Word):called.
+しゃっくり is not negative.
+isNegative(Word):called.
+する is not negative.
+isNegative(Word):called.
+て is not negative.
+sent_score_sum:-5.5
+in Phrase 4
+score(Phrase):
+Phrase.words.getWordScorelist:[-1, 0, 0]
+>>details
+死ぬ:score:-1
+で:score:0
+しまう:score:0
+sum:-1
+Phrase.weight:3,Phrase.score:-1
+phrase_score:-1
+isNegative(Phrase):
+isNegative(Word):called.
+死ぬ is not negative.
+isNegative(Word):called.
+で is not negative.
+isNegative(Word):called.
+しまう is not negative.
+sent_score_sum:-6.5
+finnaly sent_score_sum:-6.5
+text_score_sum=sent_score_sum*Sentence.score:6.5
+sentence end.
+
+each phrases' weight in Sentence 1
+in Phrase 0
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0]
+>>details
+そして:score:0
+、:score:0
+sum:0
+Phrase.weight:0,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+そして is not negative.
+isNegative(Word):called.
+、 is not negative.
+sent_score_sum:0
+in Phrase 1
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0]
+>>details
+阿鼻叫喚:score:0
+の:score:0
+sum:0
+Phrase.weight:1,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+阿鼻叫喚 is not negative.
+isNegative(Word):called.
+の is not negative.
+sent_score_sum:0
+in Phrase 2
+score(Phrase):
+Phrase.words.getWordScorelist:[-1, 0, 0]
+>>details
+地獄:score:-1
+絵図:score:0
+の:score:0
+sum:-1
+Phrase.weight:3,Phrase.score:-1
+phrase_score:-1
+isNegative(Phrase):
+isNegative(Word):called.
+地獄 is not negative.
+isNegative(Word):called.
+絵図 is not negative.
+isNegative(Word):called.
+の is not negative.
+sent_score_sum:-1
+in Phrase 3
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0]
+>>details
+世界:score:0
+で:score:0
+sum:0
+Phrase.weight:2,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+世界 is not negative.
+isNegative(Word):called.
+で is not negative.
+sent_score_sum:-1
+in Phrase 4
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0]
+>>details
+壊す:score:0
+れる:score:0
+sum:0
+Phrase.weight:2,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+壊す is not negative.
+isNegative(Word):called.
+れる is not negative.
+sent_score_sum:-1
+finnaly sent_score_sum:-1
+text_score_sum=sent_score_sum*Sentence.score:7
+sentence end.
+
+calculateTextScore: Text 0
+weightPhrase: Text 0
+Appearance numbers of words:
+おねしょ:1
+を:1
+する:2
+よう:1
+な:1
+悪人:1
+は:1
+しゃっくり:1
+し:2
+て:1
+死ん:1
+で:2
+しまえ:1
+そして:1
+、:1
+阿鼻叫喚:1
+の:2
+地獄:1
+絵図:1
+の:2
+世界:1
+で:2
+壊さ:1
+れろ:1
+cursorMainWord: Phrase 0
+おねしょ weight:1
+を weight:0
+weighest words:
+おねしょ
+cursorMainWord: Phrase 1
+する weight:2
+よう weight:1
+な weight:0
+weighest words:
+する
+cursorMainWord: Phrase 2
+悪人 weight:1
+は weight:0
+weighest words:
+悪人
+cursorMainWord: Phrase 3
+しゃっくり weight:1
+し weight:2
+て weight:0
+weighest words:
+し
+cursorMainWord: Phrase 4
+死ん weight:2
+で weight:0
+しまえ weight:0
+weighest words:
+死ん
+cursorMainWord: Phrase 0
+そして weight:1
+、 weight:0
+weighest words:
+そして
+cursorMainWord: Phrase 1
+阿鼻叫喚 weight:1
+の weight:0
+weighest words:
+阿鼻叫喚
+cursorMainWord: Phrase 2
+地獄 weight:1
+絵図 weight:1
+の weight:0
+weighest words:
+地獄
+絵図
+cursorMainWord: Phrase 3
+世界 weight:1
+で weight:0
+weighest words:
+世界
+cursorMainWord: Phrase 4
+壊さ weight:2
+れろ weight:0
+weighest words:
+壊さ
+each phrases' weight in Sentence 0
+in Phrase 0
+score(Phrase):
+Phrase.words.getWordScorelist:[-1, 0]
+>>details
+おねしょ:score:-1
+を:score:0
+sum:-1
+Phrase.weight:0,Phrase.score:-1
+phrase_score:-1
+isNegative(Phrase):
+isNegative(Word):called.
+おねしょ is not negative.
+isNegative(Word):called.
+を is not negative.
+sent_score_sum:-1
+in Phrase 1
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0, 0]
+>>details
+する:score:0
+よう:score:0
+だ:score:0
+sum:0
+Phrase.weight:2,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+する is not negative.
+isNegative(Word):called.
+よう is not negative.
+isNegative(Word):called.
+だ is not negative.
+sent_score_sum:-1
+in Phrase 2
+score(Phrase):
+Phrase.words.getWordScorelist:[-1, 0]
+>>details
+悪人:score:-1
+は:score:0
+sum:-1
+Phrase.weight:1,Phrase.score:-1
+phrase_score:-1.5
+isNegative(Phrase):
+isNegative(Word):called.
+悪人 is not negative.
+isNegative(Word):called.
+は is not negative.
+sent_score_sum:-2.5
+in Phrase 3
+score(Phrase):
+Phrase.words.getWordScorelist:[-1, 0, 0]
+>>details
+しゃっくり:score:-1
+する:score:0
+て:score:0
+sum:-1
+Phrase.weight:2,Phrase.score:-1
+phrase_score:-3
+isNegative(Phrase):
+isNegative(Word):called.
+しゃっくり is not negative.
+isNegative(Word):called.
+する is not negative.
+isNegative(Word):called.
+て is not negative.
+sent_score_sum:-5.5
+in Phrase 4
+score(Phrase):
+Phrase.words.getWordScorelist:[-1, 0, 0]
+>>details
+死ぬ:score:-1
+で:score:0
+しまう:score:0
+sum:-1
+Phrase.weight:3,Phrase.score:-1
+phrase_score:-1
+isNegative(Phrase):
+isNegative(Word):called.
+死ぬ is not negative.
+isNegative(Word):called.
+で is not negative.
+isNegative(Word):called.
+しまう is not negative.
+sent_score_sum:-6.5
+finnaly sent_score_sum:-6.5
+text_score_sum=sent_score_sum*Sentence.score:-7.5
+sentence end.
+
+each phrases' weight in Sentence 1
+in Phrase 0
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0]
+>>details
+そして:score:0
+、:score:0
+sum:0
+Phrase.weight:0,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+そして is not negative.
+isNegative(Word):called.
+、 is not negative.
+sent_score_sum:0
+in Phrase 1
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0]
+>>details
+阿鼻叫喚:score:0
+の:score:0
+sum:0
+Phrase.weight:1,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+阿鼻叫喚 is not negative.
+isNegative(Word):called.
+の is not negative.
+sent_score_sum:0
+in Phrase 2
+score(Phrase):
+Phrase.words.getWordScorelist:[-1, 0, 0]
+>>details
+地獄:score:-1
+絵図:score:0
+の:score:0
+sum:-1
+Phrase.weight:3,Phrase.score:-1
+phrase_score:-1
+isNegative(Phrase):
+isNegative(Word):called.
+地獄 is not negative.
+isNegative(Word):called.
+絵図 is not negative.
+isNegative(Word):called.
+の is not negative.
+sent_score_sum:-1
+in Phrase 3
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0]
+>>details
+世界:score:0
+で:score:0
+sum:0
+Phrase.weight:2,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+世界 is not negative.
+isNegative(Word):called.
+で is not negative.
+sent_score_sum:-1
+in Phrase 4
+score(Phrase):
+Phrase.words.getWordScorelist:[0, 0]
+>>details
+壊す:score:0
+れる:score:0
+sum:0
+Phrase.weight:2,Phrase.score:0
+phrase_score:0
+isNegative(Phrase):
+isNegative(Word):called.
+壊す is not negative.
+isNegative(Word):called.
+れる is not negative.
+sent_score_sum:-1
+finnaly sent_score_sum:-1
+text_score_sum=sent_score_sum*Sentence.score:-9
+sentence end.
+
