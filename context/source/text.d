@@ -67,7 +67,7 @@ class Word:Common{
         try{
             _pos_id=to!int(record[1]);
             _poses=idToPoses(_pos_id);
-        }catch{
+        }catch(Exception ex){
             if(record[1]==""){
                 _pos_id=-1;
                 _poses=Poses(Pos.unknown);
@@ -155,7 +155,7 @@ class Sentence:Common{
                 try{
                     phrase_number=line_sentence[cnt].split(',')[1].to!(int);
                     dependency=line_sentence[cnt].split(',')[2].to!(int);
-                }catch{
+                }catch(Exception ex){
                     exflag=true;
                     throw new stringToIntException("element in phrase",
                             cnt_phrase,this.number,parent_number);
@@ -210,7 +210,7 @@ class Text:Common{
                 float score_sentence;
                 try{
                     score_sentence=to!float(line_text[cnt].split(",")[1]);
-                }catch{
+                }catch(Exception ex){
                     throw new stringToFloatException(line_text[cnt].split(",")[1],cnt_sentence,this.number);
                 }
                 if(score_sentence<-1.||score_sentence>1.){
