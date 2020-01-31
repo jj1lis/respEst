@@ -124,7 +124,7 @@ auto calculateTextScore(Text target){//TODO
             //auto phrase_score=p.weight*raw_score;
             //writeCalcLog("phrase_score=Phrase.weight*Phrase.score:"~phrase_score.to!string);
             //auto phrase_score=raw_score;
-            auto phrase_score=raw_score*p.weight.getLankCoeff(weights_inSentence);
+            auto phrase_score=raw_score*p.weight.getLankCoeff(weights_inSentence)/p.words.length;
             writeCalcLog("phrase_score:"~phrase_score.to!string);
             if(p.isNegative){
                 phrase_score*=-1;
@@ -133,12 +133,12 @@ auto calculateTextScore(Text target){//TODO
             sent_score_sum+=phrase_score;
             writeCalcLog("sent_score_sum:"~sent_score_sum.to!string);
         }
-        s.score=sent_score_sum/*/cast(real)s.phrases.length*/;
+        s.score=sent_score_sum/cast(real)s.phrases.length;
         writeCalcLog("finnaly sent_score_sum:"~sent_score_sum.to!string);
-        text_score_sum+=s.scorefront+s.score;
+        text_score_sum+=s.score;
         writeCalcLog("text_score_sum=sent_score_sum*Sentence.score:"~text_score_sum.to!string);
     }
-    return text_score_sum/cast(real)target.sentences.length;
+    return 100*text_score_sum/cast(real)target.sentences.length;
 }
 
 auto score(Phrase p){
